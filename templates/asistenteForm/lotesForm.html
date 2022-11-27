@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<div class="col-12">
+    <form action="{% url ruta %}" method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            
+            <!-- UNIDAD DE MEDIDA -->
+            <div class="col-12">
+                <label for="listaMedidas" class="form-label">Unidad de medida</label>
+                <select name="listaMedidas" id="listaMedidas" onchange="filtrarLotes()" class="form-select">
+                    <option value="0">Seleccione una unidad de Medida</option>
+                    {% for medidas in listaMedidas %}
+                    <option value="{{ medidas.id }}">{{ medidas.descripUnidadMedida }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- LOTES -->
+            <div class="col-12">
+                <label for="conjuntoLotes" class="form-label">lotes</label>
+                <select name="conjuntoLotes" id="conjuntoLotes" onchange="filtrardDescripLote()" class="form-select">
+                    <option value="0" data-material="0">Seleccione un Lote</option>
+                    {% for lotes in conjuntoLotes %}
+                    <option value="{{ lotes.id }}" data-medida="{{ lotes.unidadMedida__id }}">{{ lotes.descripLote }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- OBSERVACIÓN DEL LOTE -->
+            <div class="col-12">
+                <label for="observacLote" class="form-label">Observación del Lote</label>
+                <input type="text" name="observacLote" id="observacLote" class="form-control">
+            </div>
+
+            <!-- DESCRIPCION DEL LOTE -->
+            <div class="col-12">
+                <label for="descripLote" class="form-label">Descripcion del lote</label>
+                <input type="text" name="descripLote" id="descripLote" class="form-control">
+            </div>
+
+            <!-- AREA DEL LOTE -->            
+            <div class="col-12">
+                <label for="areaLote" class="form-label">Area del Lote</label>
+                <input type="number" name="areaLote" id="areaLote" class="form-control">
+            </div>
+
+            <hr class="my-4">
+                <button class="w-100 btn boton1 btn-lg" type="submit">Guardar datos</button>
+
+        </div>
+    </form>
+</div>
+{% endblock %}

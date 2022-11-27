@@ -1,0 +1,56 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="icon" href="{% static 'img/ico-central.png' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+    <script src="{% static 'js/jQuery362.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-12 col-lg-6 offset-lg-3" id="contenedor">
+            <!--ENCABEZADO  -->
+            {% include 'includes/cabeza.html' %}
+            <!--FIN ENCABEZADO  -->
+            <!--MENU  NAVEGACION  -->
+            {% include 'includes/menu.html' %}
+            <!--FIN MENU  NAVEGACION  -->
+
+            <!-- BLOQUE PARA REPRESENTAR BLOQUES DE ALARMA  -->
+            {% if alarma %}
+            <div class="alert alarma">
+                <p>{{ alarma }}</p>
+            </div>
+            {% endif %}
+
+            {% if mensaje %}
+            <div class="alert mensaje">
+                <p>{{ mensaje }}</p>
+            </div>
+            {% endif %}
+
+            <main>
+                <!-- BLOQUE PRINCIPAL -->
+                {% block content %}
+                {% endblock %}
+                <!-- FIN BLOQUE PRINCIPAL -->
+                <!-- PIE DE PÁGINA -->
+                {% include 'includes/footer.html'%}
+                <!-- FIN PIE DE PÁGINA -->
+            </main>
+        </div>
+    </div>
+
+    <script src="{% static 'js/controlador.js' %}"></script>
+
+</body>
+
+</html>

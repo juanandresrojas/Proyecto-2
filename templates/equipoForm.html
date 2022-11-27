@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<form action="{% url ruta %}" method="post">
+    {% csrf_token %}
+    <div class="row g-3">
+        <div class="col-12 col-md-12">
+            <div class="form-group mt-4">
+                <label for="listaCategoriasMat" class="form-label">Lista de categorias de Materiales</label>
+                <select name="listaCategoriasMat" id="listaCategoriasMat" onchange="filtrarEquipos()" class="form-select">
+                    <option value="0">Seleccione una categoria de materiales</option>
+                    {% for materiales in listaCategoriasMat %}
+                    <option value="{{ materiales.id }}">{{ materiales.descripCategMaterial }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group mt-4">
+                <label for="listaEquipos" class="form-label">Lista de Equipos</label>
+                <select name="listaEquipos" id="listaEquipos" onchange="filtrardDescripEquipo()" class="form-select">
+                    <option value="0" data-material="0" >Seleccione un Equipo</option>
+                    {% for equipos in listaEquipos %}
+                    <option value="{{ equipos.id }}" data-material="{{ equipos.categMaterial__id }}">
+                        {{ equipos.descripEquipo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group mt-4">
+                <label for="descripEquipo" class="form-label">Descripcion del Equipo</label>
+                <input type="text" name="descripEquipo" id="descripEquipo" class="form-control">
+            </div>
+        </div>
+    </div>
+    <br>
+    <input type="submit" class="w-100 btn boton1 btn-lg" value="Guardar datos">
+</form>
+{% endblock %}
+<!--FIN BLOQUE PRINCIPAL-->
+

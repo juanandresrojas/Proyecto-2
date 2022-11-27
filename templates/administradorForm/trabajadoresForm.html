@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+     <h2>{{ nombreForm }}</h2>
+</div>
+<div class="col-12">
+     <form action="{% url ruta %}" method="post">
+          {% csrf_token %}
+          <div class="row g-3">
+
+               <!-- LISTA TRABAJADORES -->
+               <label for="listaTrabajador" class="form-label">Lista trabajador</label>
+               <select class="form-select" name="listaTrabajador" id="listaTrabajador"onchange="filtrarTrabajador()">
+                    <option value="0" selected>Seleccione un Trabajador</option>
+                    {% for trabajador in listaTrabajadores %}
+                    <option value="{{ trabajador.id }}">{{ trabajador.nombreTrabajador }}</option>
+                    {% endfor %}
+               </select>
+
+               <!-- NOMBRE DEL TRABAJADOR -->
+               <div class="col-12">
+                    <label for="nombreTrabajador" class="form-label">Nombre completo</label>
+                    <input type="text" name="nombreTrabajador" id="nombreTrabajador" class="form-control"
+                         placeholder="">
+               </div>
+
+               <!-- DOCUMENTO TRABAJADOR -->
+               <div class="col-12">
+                    <label for="nitTrabajador" class="form-label">Número de Identificación</label>
+                    <input type="number" name="nitTrabajador" id="nitTrabajador" class="form-control" placeholder="">
+               </div>
+
+               <!-- TELEFONO TRABAJADOR -->
+               <div class="col-12">
+                    <label for="telefonoTrabajador" class="form-label">Teléfono</label>
+                    <input type="number" name="telefonoTrabajador" id="telefonoTrabajador" class="form-control"
+                         placeholder="">
+               </div>
+               <!-- EMAIL TRABAJADOR -->
+               <div class="col-12">
+                    <label for="emailTrabajador" class="form-label">Correo electrónico</label>
+                    <input type="email" name="emailTrabajador" id="emailTrabajador" class="form-control"
+                         placeholder="ejemplo@ejemplo.com">
+               </div>
+
+               <!-- COSTO X HORA X TRABAJADOR -->
+               <div class="col-12">
+                    <label for="costoHoraTrabajador" class="form-label">Costo por hora</label>
+                    <input type="number" name="costoHoraTrabajador" id="costoHoraTrabajador" class="form-control">
+               </div>
+
+               <!-- ROL TRABAJADOR-->
+               <div class="col-12">
+                    <label for="rol" class="form-label">Rol</label>
+                    <select class="form-control" name="rol" id="rol">
+                         <option value="3" selected>Asistente de Finca</option>
+                    </select>
+               </div>
+
+               <hr class="my-4">
+               <button class="w-100 btn boton1 btn-lg" type="submit">Guardar datos</button>
+
+          </div>
+     </form>
+</div>
+{% endblock %}

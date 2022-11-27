@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<div class="col-12">
+    <form action="{% url ruta %}" method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            <!-- CULTIVOS -->
+            <div class="col-12">
+                <label for="listaCultivos" class="form-label">Cultivos</label>
+                <select name="listaCultivos" id="listaCultivos" class="form-select">
+                    <option value="0">Seleccione un Cultivo</option>
+                    {% for cultivo in listaCultivos %}
+                    <option value="{{ cultivo.id }}">{{ cultivo.observacCultivo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+           
+            <!-- PRODUCTOS -->
+                <div class="col-12">
+                    <label for="listaProductos" class="form-label">Productos</label>
+                    <select name="listaProductos" id="listaProductos" class="form-select">
+                        <option value="0">Seleccione un Producto</option>
+                        {% for producto in listaProductos %}
+                        <option value="{{ producto.id }}">{{ producto.descripProducto }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+            <!-- LOTES -->
+            <div class="col-12">
+                    <label for="listaLotes" class="form-label">lotes</label>
+                    <select name="listaLotes" id="listaLotes" class="form-select">
+                        <option value="0">Seleccione un Lote</option>
+                        {% for lotes in listaLotes %}
+                        <option value="{{ lotes.id }}">{{ lotes.descripLote }}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+
+            <!-- FECHA DE LA SIEMRBA -->
+                <div class="col-12">
+                    <label for="fechaSiembra" class="form-label">Fecha de la siembra</label>
+                    <input type="date" name="fechaSiembra" id="fechaSiembra" class="form-control">
+                </div>
+
+                <!-- FECHA DE LA COSECHA -->
+                <div class="col-12">
+                    <label for="fechaCosecha" class="form-label">Fecha de la cosecha</label>
+                    <input type="date" name="fechaCosecha" id="fechaCosecha" class="form-control">
+                </div>
+           
+
+            <!-- CANTIDAD DE LA COSECHA -->            
+                <div class="col-12">
+                    <label for="cantidadCosecha" class="form-label">Cantidad de la cosecha</label>
+                    <input type="number" name="cantidadCosecha" id="cantidadCosecha" class="form-control">
+                </div>
+        
+
+             <!-- UNIDAD DE MEDIDA -->
+             <div class="col-12">
+                <label for="listaMedidas" class="form-label">Unidad de medida</label>
+                <select name="listaMedidas" id="listaMedidas" class="form-select">
+                    <option value="0">Seleccione una unidad de Medida</option>
+                    {% for medidas in listaMedidas %}
+                    <option value="{{ medidas.id }}">{{ medidas.descripUnidadMedida }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+
+            <!-- OBSERVACIÓN DEL CULTIVO -->
+                <div class="col-12">
+                    <label for="observacCultivo" class="form-label">Observación del cultivo</label>
+                    <input type="text" name="observacCultivo" id="observacCultivo" class="form-control">
+                </div>
+          
+
+            <!-- ACTIVO -->
+                <div class="col-12 text-center">
+                    <label for="activo" name="activo">Activo</label>
+                    <input type="checkbox" name="activo">
+                </div>
+
+                <hr class="my-4">
+                <button class="w-100 btn boton1 btn-lg" type="submit">Guardar datos</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+<!--FIN BLOQUE PRINCIPAL-->

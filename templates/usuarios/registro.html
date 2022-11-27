@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- BLOQUE PRINCIPAL -->
+<div class="py-5 text-center">
+    <h2> Formulario de registro </h2>
+</div>
+
+<!-- <hr class="my-4"> -->
+<div class="col-12">
+    <form action="{% url 'registro' %} " method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="nombres" class="form-label">Nombres</label>
+                <input type="text" class="form-control" name="nombres" id="nombres" placeholder="Ingrese su nombre"
+                    value="" required="">
+                <div class="invalid-feedback">
+                    Se requiere el nombre y apellidos.
+                </div>
+            </div>
+            <div class="col-12">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="correo@ejemplo.com">
+                <div class="invalid-feedback">
+                    Por favor ingrese un correo válido.
+                </div>
+            </div>           
+            <div class="col-12">
+                <label for="phone_number" class="form-label">Teléfono</label>
+                <input type="numeric" class="form-control" name="phone_number" id="phone_number" placeholder="">
+                <div class="invalid-feedback">
+                    Por favor ingrese su numero.
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="">
+                <div class="invalid-feedback">
+                    Por favor ingrese una Contraseña con al menos ocho caracteres.
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="">
+
+            </div>
+
+            <div class="col-12">
+                <label for="tipoUsuario" class="form-label">Tipo de Usuario</label>
+                <select class="form-control" name="tipoUsuario" id="tipoUsuario">
+                    <option value="1">Administrador del Sistema</option>
+                    <option value="2" selected>Gerente de Finca</option>
+                    <option value="3">Asistente de Finca</option>
+                </select>
+
+            </div>
+
+
+        </div>
+
+        <hr class="my-4">
+
+        <button class="w-100 btn boton1 btn-lg" type="submit">Guardar datos</button>
+    </form>
+   
+
+</div>
+<!-- FIN BLOQUE PRINCIPAL -->
+{% endblock %}

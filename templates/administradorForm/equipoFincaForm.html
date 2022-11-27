@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<form action="{% url ruta %}" method="post">
+    {% csrf_token %}
+    <div class="row g-3">
+        <div class="col-12 col-md-12">
+            <div class="form-group mt-4">
+                <label for="listaEquipoFinca" class="form-label"> Lista de categorias de Equipos </label>
+                <select name="listaEquipoFinca" id="listaEquipoFinca" onchange="filtrardDescripEquipoFinca()" class="form-select">
+                    <option value="0">Seleccione un Equipo</option>
+                    {% for equipoFinca in listaEquipoFinca %}
+                    <option value="{{ equipoFinca.id }}">{{ equipoFinca.existenciaEquipo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+             <!-- EXISTENCIA DE EQUIPOS -->            
+            <div class="form-group mt-4">
+                <label for="existenciaEquipo" class="form-label">Existencia de Equipos</label>
+                <input type="number" name="existenciaEquipo" id="existenciaEquipo" class="form-control">
+            </div>
+            
+            <!-- VALOR UNITARIO EQUIPO -->  
+            <div class="form-group mt-4">
+                <label for="valorUnitarioEquipo" class="form-label">Valor unitario del Equipo</label>
+                <input type="number" name="valorUnitarioEquipo" id="valorUnitarioEquipo" class="form-control">
+            </div>
+            
+            <!-- DEPREC EQUIPO -->  
+            <div class="form-group mt-4">
+                <label for="deprecEquipo" class="form-label">Deprec del Equipo</label>
+                <input type="number" name="deprecEquipo" id="deprecEquipo" class="form-control">
+            </div>
+        </div>
+    </div>
+    <br>
+    <input type="submit" class="w-100 btn boton1 btn-lg" value="Guardar datos">
+</form>
+{% endblock %}
+<!--FIN BLOQUE PRINCIPAL-->
+

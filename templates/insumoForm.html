@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<form action="{% url ruta %}" method="post">
+    {% csrf_token %}
+    <div class="row g-3">
+        <div class="col-12 col-md-12">
+            <div class="form-group mt-4">
+                <label for="listaMedidas" class="form-label">Lista de Unidades de Medida</label>
+                <select name="listaMedidas" id="listaMedidas"  onchange="filtrarInsumos()" class="form-select">
+                    <option value="0">Seleccione una unidad de Medida</option>
+                    {% for medidas in listaMedidas %}
+                    <option value="{{ medidas.id }}">{{ medidas.descripUnidadMedida }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group mt-4">
+                <label for="listaMateriales" class="form-label">Lista de Materiales</label>
+                <select name="listaMateriales" id="listaMateriales" onchange="filtrarInsumos()" class="form-select">
+                    <option value="0">Seleccione un Material</option>
+                    {% for materiales in listaMateriales %}
+                    <option value="{{ materiales.id }}">{{ materiales.descripCategMaterial }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group mt-4">
+                <label for="listainsumos" class="form-label">Lista de categorias de insumos</label>
+                <select name="listainsumos" id="listainsumos" onchange="filtradescripInsumos()" class="form-select">
+                    <option value="0" data-medida="0" data-material="0" >Seleccione una categoria de insumos</option>
+                    {% for insumos in listainsumos %}
+                    <option value="{{ insumos.id }}" data-medida="{{ insumos.unidadMedida__id }}" ,
+                        data-material="{{ insumos.categMaterial__id }}">{{ insumos.descripInsumo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group mt-4">
+                <label for="descripInsumo" class="form-label">Descripcion del Insumo</label>
+                <input type="text" name="descripInsumo" id="descripInsumo" class="form-control">
+            </div>
+        </div>
+    </div>
+    <br>
+    <input type="submit" class="w-100 btn boton1 btn-lg" value="Guardar datos">
+</form>
+{% endblock %}
+<!--FIN BLOQUE PRINCIPAL-->

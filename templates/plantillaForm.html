@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<form action="{% url ruta %}" method="post">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+    <div class="row g-3">
+        {% for field in form %}
+        <div class="col-12 form-group">
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            {% render_field field class="form-control" %}
+        </div>
+        {% endfor %}
+    </div>
+    {% for error in form.comment.errores %}
+    <div class="row">
+        <div class="alert alert-danger">{{error}}</div>
+    </div>
+    {% endfor %}
+    <br>
+    <input type="submit" class="w-100 btn boton1 btn-lg" value="Guardar datos">
+</form>
+{% endblock %}
+<!--FIN BLOQUE PRINCIPAL-->

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="py-5 text-center">
+    <h2> Formulario de Ingreso </h2>
+</div>
+<div class="col-12">
+    <form action="{% url 'ingresar' %}" method="POST">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="email" class="form-label">Correo:</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Ingrese su correo">
+                <div class="invalid-feedback">
+                    Por favor ingrese su correo.
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label for="password" class="form-label">Contraseña:</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="">
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <button class="w-100 btn boton1 btn-lg" type="submit" value="Ingresar">Ingresar</button>
+
+    </form>
+    <hr class="my-4">
+    <p class="text-center">
+        <a href="#">¿Olvido su Contraseña?</a>
+    </p>
+
+</div>
+{% endblock %}
+
+
+
