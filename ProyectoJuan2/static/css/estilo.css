@@ -1,0 +1,96 @@
+:root {
+    --fondo1: beige;
+    --fondo2: white;
+    --fondo3: SeaGreen;
+    --color-text1: SeaGreen;
+    --color-text2: rgb(253, 105, 15);
+    --color-Select: DarkGreen;
+    --boton1: Teal;
+    --boton2: SlateGray;
+    --boton3: Goldenrod;
+    --color-alarma: red;
+}
+
+body {
+    background-color: var(--fondo1);
+    color: var(--color-text1);
+}
+
+#contenedor {
+    background-color: var(--fondo2);
+    padding: 3%;
+}
+
+#encabezado {
+    background-image: url('../img/agricolas.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: var(--color-text2);
+    margin: 0;
+}
+
+#encabezado img {
+    width: 100%;
+    /*margin: 2%;*/
+}
+
+#titulo {
+    text-align: center;
+}
+
+#titulo>h1 {
+    font-size: 2.2em;
+}
+
+#mensaje {
+    text-align: center;
+
+}
+
+
+/********* BOTONES Y ENLACES *****************/
+.nav-link, a , #tituloPie, .dropdown-item {
+    color: var(--color-text1);
+
+}
+
+a:hover {
+    color: var(--color-Select);
+}
+
+
+.boton1 {
+    background-color: var(--boton1);
+    color: var(--fondo2);
+}
+
+.boton1:hover {
+    background-color: var(--boton2);
+    color: var(--fondo2);
+}
+
+.stretched-link {
+    text-align: center;
+}
+
+/* *************** CUADRO DE AVISOS ************************ */
+
+.mensaje, .alarma {
+    margin: 20px;
+    border-radius: 5px;
+    flex-shrink: inherit;
+    color: white;
+    font-weight: bold;
+
+}
+
+.alarma {
+    background-color: var(--color-alarma);
+}
+
+.mensaje {
+    background-color: var(--color-Select);
+}
+
+/* *******************************USUARIOS***************************** */
+
