@@ -185,6 +185,7 @@ def editarTrabajador(request):
     # -- en cualquier caso...
     # context['form'] = TrabajadorForm()
     return render(request, 'administradorForm/trabajadoresForm.html', context)
+
 # *****************************************************************************************************************
 
 
@@ -258,3 +259,77 @@ def editarEquipoFinca(request):
             context['alarma': 'Por favor seleccione todos los datos']
    # Renderizar
     return render(request, 'administradorForm/equipoFincaForm.html', context)
+
+# *****************************************************************************************************************
+
+
+def editarIndirectos(request):
+
+    # consultar lotes
+    regFinca = request.user.Finca
+
+    # consultar los datos
+    listaIndirectos = Indirecto.objects.filter(finca=regFinca).values(
+        'id', 'observacPago')
+
+    # Armar context
+    context = {
+        'titulo': 'Costos Indirectos',
+        'nombreForm': 'Consultar y Editar Costos Indirectos',
+        'ruta': 'indirectos',
+        'listaIndirectos': listaIndirectos
+    }
+
+    # SI ES AJAX Y POST
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        if request.method == 'POST':
+            # Toma la data enviada por el cliente
+            data = json.load(request)
+            id = data.get('id')
+            # CONSULTAR REGITRO DE INDIRECTO
+            regIndirecto = Indirecto.objects.get(id=id)
+            # Respuesta JSON
+            data = {
+                'fechaPago': regIndirecto.fechaPago,
+                'numFactura': regIndirecto.numFactura,
+                'observacPago': regIndirecto.observacPago,
+                'valorPagado': regIndirecto.valorPagado,
+            }
+            return JsonResponse(data)
+
+    if request.method == 'POST':
+        # Validar datos del formulario
+        id = int(request.POST['listaIndirectos'])
+        fechaPago = request.POST['fechaPago']
+        numFactura = request.POST['numFactura']
+        observacPago = request.POST['observacPago']
+        valorPagado = request.POST['valorPagado']
+
+        if len(fechaPago) > 0 and len(numFactura) > 0 and len(observacPago) > 0:
+            if id > 0:
+                # MODIFICAR REGISTRO
+                existe = Indirecto.objects.filter(id=id).exists()
+                if existe:
+                    regEquipoFinca = Indirecto.objects.get(id=id)
+                    regEquipoFinca.fechaPago = fechaPago
+                    regEquipoFinca.numFactura = numFactura
+                    regEquipoFinca.observacPago = observacPago
+                    regEquipoFinca.valorPagado = valorPagado
+                    regEquipoFinca.finca = regFinca
+                    regEquipoFinca.save()
+                    context['mensaje'] = 'Pago indirecto modificado'
+                else:
+                    context['alarma'] = 'El registro con PK = ' + \
+                        str(id) + 'no existe'
+            else:
+                regEquipoFinca = Indirecto(fechaPago=fechaPago,
+                                           numFactura=numFactura,
+                                           observacPago=observacPago, finca=regFinca,
+                                           valorPagado=valorPagado)
+                regEquipoFinca.save()
+                context['mensaje'] = 'Pago indirecto creado'
+        else:
+            context['alarma': 'Por favor seleccione todos los datos']
+   # Renderizar
+    return render(request, 'administradorForm/indirectosForm.html', context)
