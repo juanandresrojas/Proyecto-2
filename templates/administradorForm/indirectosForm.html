@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<div class="col-12">
+    <form action="{% url ruta %}" method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+
+             <!-- Lista de indirectos -->
+            <div class="form-group mt-4">
+                <label for="listaIndirectos" class="form-label"> Lista de categorias de Indirectos </label>
+                <select name="listaIndirectos" id="listaIndirectos" onchange="filtrardDescripIndirectos()" class="form-select">
+                    <option value="0">Seleccione el indirecto a consultar </option>
+                    {% for indirectos in listaIndirectos %}
+                    <option value="{{ indirectos.id }}">{{ indirectos.observacPago }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- fecha de Pago -->
+            <div class="col-12">
+                <label for="fechaPago" class="form-label">Fecha Pago</label>
+                <input type="date" name="fechaPago" id="fechaPago" class="form-control">
+            </div>
+
+            <!-- num Factura -->
+            <div class="col-12">
+                <label for="numFactura" class="form-label">Numero de Factura</label>
+                <input type="number" name="numFactura" id="numFactura" class="form-control">
+            </div>
+
+            <!-- observa Pago -->
+            <div class="col-12">
+                <label for="observacPago" class="form-label">Observacion del Pago</label>
+                <input type="text" name="observacPago" id="observacPago" class="form-control">
+            </div>
+
+            <!-- valor Pagado -->            
+            <div class="col-12">
+                <label for="valorPagado" class="form-label">Valor Pagado</label>
+                <input type="number" name="valorPagado" id="valorPagado" class="form-control">
+            </div>
+
+            <hr class="my-4">
+                <button class="w-100 btn boton1 btn-lg" type="submit">Guardar datos</button>
+
+        </div>
+    </form>
+</div>
+{% endblock %}

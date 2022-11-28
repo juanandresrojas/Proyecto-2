@@ -328,3 +328,24 @@ function filtrardDescripEquipoFincaResp(data) {
     document.getElementById('valorUnitarioEquipo').value = data['valorUnitarioEquipo'];
     document.getElementById('deprecEquipo').value = data['deprecEquipo'];
 }
+
+//+++++++++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR COSTOS INDIRECTOS +++++++++++++++++++++++++++++++++++++++++++++++++++
+
+function filtrardDescripIndirectos() {
+    let id = document.getElementById('listaIndirectos').value;
+    let url = "http://localhost:8000/gerentes/indirectos/";
+    let datos = {
+        'id': id,        
+    };
+    mensajeAjax(url, datos, filtrardDescripIndirectosResp);
+
+}
+
+function filtrardDescripIndirectosResp(data) {
+    document.getElementById('fechaPago').value = data['fechaPago'];
+    document.getElementById('numFactura').value = data['numFactura'];
+    document.getElementById('observacPago').value = data['observacPago'];
+    document.getElementById('valorPagado').value = data['valorPagado'];
+}
+
+
