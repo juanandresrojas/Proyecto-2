@@ -42,7 +42,11 @@ class Indirecto (models.Model):
     valorPagado = models.DecimalField(max_digits=10, decimal_places=2,  null=False)
 
     def __str__(self):
-        return self.finca
+        return "{} - {}".format(self.finca, self.observacPago )
+
+    class Meta:
+        verbose_name_plural = "Costos indirectos"
+
 
 #***************************************************************************************
 

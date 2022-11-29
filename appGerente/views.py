@@ -11,15 +11,10 @@ import json
 def editarCultivos(request):
     # consultar cultivos
     regFinca = request.user.Finca
-
-    # consultar los datos
-    listaLotes = Lote.objects.filter(finca=regFinca).values()
-    listaCultivos = Cultivo.objects.all().values('id', 'observacCultivo').values()
-    listaProductos = Producto.objects.filter(finca=regFinca).values()
-    listaMedidas = UnidadMedida.objects.all().values(
-        'id', 'descripUnidadMedida').values()
-
-    # Armar context
+    listaLotes = Lote.objects.filter(finca=regFinca)
+    listaCultivos = request.Cultivo.Lote
+    listaProductos = Producto.objects.filter(finca=regFinca)
+    listaMedidas = UnidadMedida.objects.filter(finca=regFinca)
     context = {
         'titulo': 'Cultivos',
         'nombreForm': 'Consultar y Editar Cultivos',
@@ -30,6 +25,40 @@ def editarCultivos(request):
         'listaMedidas': listaMedidas,
 
     }
+
+    if request.method == 'POST':
+        listaCultivo = int(request.POST['listaCultivos'])
+        listaLotes = int(request.POST['listaLotes'])  # ID del lote
+        listaProductos = int(request.POST['listaProductos'])  # ID del producto
+        listaMedidas = int(request.POST['listaMedidas'])  # ID de medidas
+        activo = request.POST['activo']
+        fechaSiembra = request.POST['fechaSiembra']
+        fechaCosecha = request.POST['fechaCosecha']
+        cantidadCosecha = request.POST['cantidadCosecha']
+        observacCultivo = request.POST['observacCultivo']
+
+        regLote = Lote.objects.get(id=listaLotes)
+        regProducto = Producto.objects.get(id=listaProductos)
+        regMedidas = UnidadMedida.objects.get(id=listaMedidas)
+
+        # SI cultivo >0, entonces modificar exixtente
+        if listaCultivo == 0:
+            regCultivo = Cultivo(lote=regLote, producto=regProducto, activo=activo, unidadMedida=regMedidas, fechaSiembra=fechaSiembra,
+                                 fechaCosecha=fechaCosecha, cantidadCosecha=cantidadCosecha, observacCultivo=observacCultivo)
+            context['mensaje'] = 'Cultivo creado'
+        else:
+            # sino, crear nuevo
+            regCultivo = Cultivo.objects.get(id=listaCultivo)
+            regCultivo.lote = regLote
+            regCultivo.producto = regProducto
+            regCultivo.activo = activo
+            regCultivo.unidadMedida = regMedidas
+            regCultivo.fechaSiembra = fechaSiembra
+            regCultivo.fechaCosecha = fechaCosecha
+            regCultivo.cantidadCosecha = cantidadCosecha
+            regCultivo.observacCultivo = observacCultivo
+            context['mensaje'] = 'Cultivo modificado'
+        regCultivo.save()
 
     # Armar retorno
     return render(request, 'administradorForm/cultivosForm.html', context)
@@ -183,7 +212,6 @@ def editarTrabajador(request):
         else:
             context['alarma'] = 'Debe de diligenciar todos los datos'
     # -- en cualquier caso...
-    # context['form'] = TrabajadorForm()
     return render(request, 'administradorForm/trabajadoresForm.html', context)
 
 # *****************************************************************************************************************
