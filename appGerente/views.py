@@ -71,8 +71,7 @@ def editarLotes(request):
     regFinca = request.user.Finca
 
     # consultar los datos
-    conjuntoLotes = Lote.objects.filter(finca=regFinca).values(
-        'id', 'descripLote', 'unidadMedida__id')
+    conjuntoLotes = Lote.objects.filter(finca=regFinca).values('id', 'descripLote', 'unidadMedida__id')
     listaMedidas = UnidadMedida.objects.all().values('id', 'descripUnidadMedida')
 
     # Armar context
@@ -223,15 +222,16 @@ def editarEquipoFinca(request):
     regFinca = request.user.Finca
 
     # consultar los datos
-    listaEquipoFinca = EquipoFinca.objects.filter(finca=regFinca).values(
-        'id', 'existenciaEquipo')
+    listaEquipoFinca = EquipoFinca.objects.filter(finca=regFinca).values('id', 'existenciaEquipo', 'equipo__id')
+    listaEquipos = Equipo.objects.all().values('id', 'descripEquipo')
 
     # Armar context
     context = {
         'titulo': 'Equipo de Finca',
         'nombreForm': 'Consultar y Editar Equipo de Finca',
         'ruta': 'equipoFinca',
-        'listaEquipoFinca': listaEquipoFinca
+        'listaEquipoFinca': listaEquipoFinca,
+        'listaEquipos': listaEquipos,
     }
 
     # SI ES AJAX Y POST
@@ -249,12 +249,14 @@ def editarEquipoFinca(request):
                 'existenciaEquipo': regEquipoFinca.existenciaEquipo,
                 'valorUnitarioEquipo': regEquipoFinca.valorUnitarioEquipo,
                 'deprecEquipo': regEquipoFinca.deprecEquipo,
+                'equipo': regEquipoFinca.equipo.id,
             }
             return JsonResponse(data)
 
     if request.method == 'POST':
         # Validar datos del formulario
         id = int(request.POST['listaEquipoFinca'])
+        listaEquipos = int(request.POST['listaEquipos'])
         existenciaEquipo = request.POST['existenciaEquipo']
         valorUnitarioEquipo = request.POST['valorUnitarioEquipo']
         deprecEquipo = request.POST['deprecEquipo']
@@ -264,7 +266,7 @@ def editarEquipoFinca(request):
                 # MODIFICAR REGISTRO
                 existe = EquipoFinca.objects.filter(id=id).exists()
                 if existe:
-                    regEquipo = Equipo.objects.get(id=id)
+                    regEquipo = Equipo.objects.get(id=listaEquipos)
                     regEquipoFinca = EquipoFinca.objects.get(id=id)
                     regEquipoFinca.existenciaEquipo = existenciaEquipo
                     regEquipoFinca.valorUnitarioEquipo = valorUnitarioEquipo
@@ -277,10 +279,11 @@ def editarEquipoFinca(request):
                     context['alarma'] = 'El registro con PK = ' + \
                         str(id) + 'no existe'
             else:
+                regEquipo = Equipo.objects.get(id=listaEquipos)
                 regEquipoFinca = EquipoFinca(existenciaEquipo=existenciaEquipo,
+                                             equipo=regEquipo,
                                              valorUnitarioEquipo=valorUnitarioEquipo,
-                                             deprecEquipo=deprecEquipo, finca=regFinca,
-                                             equipo=regEquipo)
+                                             deprecEquipo=deprecEquipo, finca=regFinca)
                 regEquipoFinca.save()
                 context['mensaje'] = 'Equipo de finca creado'
         else:

@@ -325,8 +325,33 @@ function filtrardDescripEquipoFinca() {
 
 function filtrardDescripEquipoFincaResp(data) {
     document.getElementById('existenciaEquipo').value = data['existenciaEquipo'];
+    document.getElementById("listaEquipos").value = data["equipo"];
     document.getElementById('valorUnitarioEquipo').value = data['valorUnitarioEquipo'];
     document.getElementById('deprecEquipo').value = data['deprecEquipo'];
+}
+
+function filtrarEquipoFinca() {
+    let idEquipo = document.getElementById("listaEquipos").value;
+    let listaopciones = document.getElementById("listaEquipoFinca").options;
+
+    let caso = 0
+    if ( idEquipo > '0') caso += 1;
+    
+    //Primero deja todo visible
+    for (let i = 1; i < listaopciones.length; i++) {
+        listaopciones[i].removeAttribute("hidden");
+    }
+
+    switch (caso) {
+        case 1:    // equipo > 0: Filtrar solo por equipo
+            for (let i = 1; i < listaopciones.length; i++) {
+                let equipo = listaopciones[i].dataset.equipo;
+                if (equipo != idEquipo) {
+                  listaopciones[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+    }
 }
 
 //+++++++++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR COSTOS INDIRECTOS +++++++++++++++++++++++++++++++++++++++++++++++++++
