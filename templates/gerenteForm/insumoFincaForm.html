@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<form action="{% url ruta %}" method="post">
+    {% csrf_token %}
+    <div class="row g-3">
+        <div class="col-12 col-md-12">
+            <!-- EXISTENCIA DE INSUMOS  -->   
+            <div class="form-group mt-4">
+                <label for="listaInsumos" class="form-label">Lista de Insumos en general </label>
+                <select name="listaInsumos" id="listaInsumos" onchange="filtrarInsumosFinca()" class="form-select">
+                    <option value="0" > Seleccione un Insumo </option>
+                    {% for insumos in listaInsumos %}
+                    <option value="{{ insumos.id }}">{{ insumos.descripInsumo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- EXISTENCIA DE INSUMOS DE FINCA  -->   
+            <div class="form-group mt-4">
+                <label for="listaInsumosFinca" class="form-label"> Lista de categorias de insumos de su finca </label>
+                <select name="listaInsumosFinca" id="listaInsumosFinca" onchange="filtrardDatosInsumoFinca()" class="form-select">
+                    <option value="0"> Seleccione su Insumo </option>
+                    {% for insumoFinca in listaInsumosFinca %}
+                    <option value="{{ insumoFinca.id }}" data-insumo="{{ insumoFinca.insumo__id }}" data-medida="{{ insumoFinca.unidadmedida__id }}" >{{ insumoFinca.descripInsumoFinca }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+             <!-- EXISTENCIA DE INSUMOS -->            
+            <div class="form-group mt-4">
+                <label for="existenciaInsumo" class="form-label">Existencia de Insumo</label>
+                <input type="number" name="existenciaInsumo" id="existenciaInsumo" class="form-control">
+            </div>
+
+             <!-- EXISTENCIA DE UNIDAD DE MEDIDA  -->   
+            <div class="form-group mt-4">
+                <label for="listaUnidades" class="form-label">Lista de Unidades de Medida</label>
+                <select name="listaUnidades" id="listaUnidades" onchange="filtrarInsumosFinca()" class="form-select">
+                    <option value="0" > Seleccione un Insumo </option>
+                    {% for medida in listaUnidades %}
+                    <option value="{{ medida.id }}">{{ medida.descripUnidadMedida }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- VALOR UNITARIO INSUMO -->  
+            <div class="form-group mt-4">
+                <label for="valorUnitarioInsumo" class="form-label">Valor unitario del Insumo</label>
+                <input type="number" name="valorUnitarioInsumo" id="valorUnitarioInsumo" class="form-control">
+            </div>
+
+            <!-- DESCRIPCION INSUMO --> 
+            <div class="form-group mt-4">
+                <label for="descripInsumoFinca" class="form-label">Descripcion del Insumo de finca</label>
+                <input type="text" name="descripInsumoFinca" id="descripInsumoFinca" class="form-control">
+            </div>
+        </div>
+    </div>
+    <br>
+    <input type="submit" class="w-100 btn boton1 btn-lg" value="Guardar datos">
+</form>
+{% endblock %}
+<!--FIN BLOQUE PRINCIPAL-->
+

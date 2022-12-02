@@ -12,7 +12,7 @@ def editarCultivos(request):
     # consultar cultivos
     regFinca = request.user.Finca
     listaLotes = Lote.objects.filter(finca=regFinca)
-    listaCultivos = request.Cultivo.Lote
+    listaCultivos = Cultivo.all().filter(type=Lote.objects.get(id=listaLotes))
     listaProductos = Producto.objects.filter(finca=regFinca)
     listaMedidas = UnidadMedida.objects.filter(finca=regFinca)
     context = {
@@ -61,9 +61,8 @@ def editarCultivos(request):
         regCultivo.save()
 
     # Armar retorno
-    return render(request, 'administradorForm/cultivosForm.html', context)
+    return render(request, 'gerenteForm/cultivosForm.html', context)
 # ******************************************************************************************************************
-
 
 def editarLotes(request):
 
@@ -211,7 +210,7 @@ def editarTrabajador(request):
         else:
             context['alarma'] = 'Debe de diligenciar todos los datos'
     # -- en cualquier caso...
-    return render(request, 'administradorForm/trabajadoresForm.html', context)
+    return render(request, 'gerenteForm/trabajadoresForm.html', context)
 
 # *****************************************************************************************************************
 
@@ -222,7 +221,7 @@ def editarEquipoFinca(request):
     regFinca = request.user.Finca
 
     # consultar los datos
-    listaEquipoFinca = EquipoFinca.objects.filter(finca=regFinca).values('id', 'existenciaEquipo', 'equipo__id')
+    listaEquipoFinca = EquipoFinca.objects.filter(finca=regFinca).values('id', 'descripEquipoFinca', 'equipo__id')
     listaEquipos = Equipo.objects.all().values('id', 'descripEquipo')
 
     # Armar context
@@ -249,6 +248,7 @@ def editarEquipoFinca(request):
                 'existenciaEquipo': regEquipoFinca.existenciaEquipo,
                 'valorUnitarioEquipo': regEquipoFinca.valorUnitarioEquipo,
                 'deprecEquipo': regEquipoFinca.deprecEquipo,
+                'descripEquipoFinca': regEquipoFinca.descripEquipoFinca,
                 'equipo': regEquipoFinca.equipo.id,
             }
             return JsonResponse(data)
@@ -260,6 +260,7 @@ def editarEquipoFinca(request):
         existenciaEquipo = request.POST['existenciaEquipo']
         valorUnitarioEquipo = request.POST['valorUnitarioEquipo']
         deprecEquipo = request.POST['deprecEquipo']
+        descripEquipoFinca= request.POST['descripEquipoFinca']
 
         if len(existenciaEquipo) > 0 and len(valorUnitarioEquipo) > 0 and len(deprecEquipo) > 0:
             if id > 0:
@@ -271,6 +272,7 @@ def editarEquipoFinca(request):
                     regEquipoFinca.existenciaEquipo = existenciaEquipo
                     regEquipoFinca.valorUnitarioEquipo = valorUnitarioEquipo
                     regEquipoFinca.deprecEquipo = deprecEquipo
+                    regEquipoFinca.descripEquipoFinca = descripEquipoFinca
                     regEquipoFinca.finca = regFinca
                     regEquipoFinca.equipo = regEquipo
                     regEquipoFinca.save()
@@ -283,13 +285,13 @@ def editarEquipoFinca(request):
                 regEquipoFinca = EquipoFinca(existenciaEquipo=existenciaEquipo,
                                              equipo=regEquipo,
                                              valorUnitarioEquipo=valorUnitarioEquipo,
-                                             deprecEquipo=deprecEquipo, finca=regFinca)
+                                             deprecEquipo=deprecEquipo, finca=regFinca, descripEquipoFinca=descripEquipoFinca)
                 regEquipoFinca.save()
                 context['mensaje'] = 'Equipo de finca creado'
         else:
             context['alarma': 'Por favor seleccione todos los datos']
    # Renderizar
-    return render(request, 'administradorForm/equipoFincaForm.html', context)
+    return render(request, 'gerenteForm/equipoFincaForm.html', context)
 
 # *****************************************************************************************************************
 
@@ -363,4 +365,86 @@ def editarIndirectos(request):
         else:
             context['alarma': 'Por favor seleccione todos los datos']
    # Renderizar
-    return render(request, 'administradorForm/indirectosForm.html', context)
+    return render(request, 'gerenteForm/indirectosForm.html', context)
+
+#*****************************************************************************************************************
+
+def editarInsumoFinca(request):
+
+    # consultar lotes
+    regFinca = request.user.Finca
+
+    # consultar los datos
+    listaInsumosFinca = InsumoFinca.objects.filter(finca=regFinca).values('id', 'descripInsumoFinca', 'insumo__id', 'unidadmedida__id')
+    listaInsumos = Insumo.objects.all().values('id', 'descripInsumo')
+    listaUnidades = UnidadMedida.objects.all().values('id', 'descripUnidadMedida')
+
+    # Armar context
+    context = {
+        'titulo': 'Insumo de Finca',
+        'nombreForm': 'Consultar y Editar Equipo de Finca',
+        'ruta': 'insumoFinca',
+        'listaInsumosFinca': listaInsumosFinca,
+        'listaInsumos': listaInsumos,
+        'listaUnidades': listaUnidades,
+    }
+
+    # SI ES AJAX Y POST
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        if request.method == 'POST':
+            # Toma la data enviada por el cliente
+            data = json.load(request)
+            id = data.get('id')
+            # CONSULTAR REGITRO DE INSUMO
+            regInsumoFinca = InsumoFinca.objects.get(id=id)
+            # Respuesta JSON
+            data = {
+                'insumo': regInsumoFinca.insumo.id,
+                'unidadmedida': regInsumoFinca.unidadmedida.id,
+                'existenciaInsumo': regInsumoFinca.existenciaInsumo,
+                'valorUnitarioInsumo': regInsumoFinca.valorUnitarioInsumo,
+                'descripInsumoFinca': regInsumoFinca.descripInsumoFinca,
+            }
+            return JsonResponse(data)
+
+    if request.method == 'POST':
+        # Validar datos del formulario
+        id = int(request.POST['listaInsumosFinca'])
+        listaInsumos = int(request.POST['listaInsumos'])
+        listaUnidades = int(request.POST['listaUnidades'])
+        existenciaInsumo = request.POST['existenciaInsumo']
+        valorUnitarioInsumo = request.POST['valorUnitarioInsumo']
+        descripInsumoFinca= request.POST['descripInsumoFinca']
+
+        if len(existenciaInsumo) > 0 and len(valorUnitarioInsumo) > 0 and len(descripInsumoFinca) > 0:
+            if id > 0:
+                # MODIFICAR REGISTRO
+                existe = InsumoFinca.objects.filter(id=id).exists()
+                if existe:
+                    regInsumo = Insumo.objects.get(id=listaInsumos)
+                    regMedida = UnidadMedida.objects.get(id=listaUnidades)
+                    regInsumoFinca = InsumoFinca.objects.get(id=id)
+                    regInsumoFinca.insumo = regInsumo
+                    regInsumoFinca.finca = regFinca
+                    regInsumoFinca.existenciaInsumo = existenciaInsumo
+                    regInsumoFinca.valorUnitarioInsumo = valorUnitarioInsumo
+                    regInsumoFinca.descripInsumoFinca = descripInsumoFinca
+                    regInsumoFinca.unidadmedida = regMedida
+                    regInsumoFinca.save()
+                    context['mensaje'] = 'Insumo de finca modificado'
+                else:
+                    context['alarma'] = 'El registro con PK = ' + \
+                        str(id) + 'no existe'
+            else:
+                regInsumo = Insumo.objects.get(id=listaInsumos)
+                regMedida = UnidadMedida.objects.get(id=listaUnidades)
+                regInsumoFinca = InsumoFinca(insumo=regInsumo, existenciaInsumo=existenciaInsumo,
+                                             valorUnitarioInsumo=valorUnitarioInsumo,
+                                             unidadmedida=regMedida, finca=regFinca, descripInsumoFinca=descripInsumoFinca)
+                regInsumoFinca.save()
+                context['mensaje'] = 'Insumo de finca creado'
+        else:
+            context['alarma': 'Por favor seleccione todos los datos']
+   # Renderizar
+    return render(request, 'gerenteForm/insumoFincaForm.html', context)

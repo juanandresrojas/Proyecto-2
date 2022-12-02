@@ -145,6 +145,7 @@ def editarProvedores(request):
             if id > 0 and len(telefonoProveedor) > 0 and len(nitProvedor) > 0 and len(direccionProveedor) > 0 and len(correoProveedor) > 0:
                 existe = Proveedor.objects.filter(id=id).exists()
                 if existe:
+                    #EDITAR PROVEEDOR
                     regProveedor = Proveedor.objects.get(id=id)
                     regProveedor.nombreProveedor = nombreProveedor
                     regProveedor.telefonoProveedor = telefonoProveedor
@@ -157,6 +158,7 @@ def editarProvedores(request):
                     context['alarma'] = 'El registro con PK = ' + \
                         str(id) + 'no existe'
             else:
+                #CREAR PROVEEDOR
                 regProveedor = Proveedor(nombreProveedor=nombreProveedor, telefonoProveedor=telefonoProveedor,nitProvedor=nitProvedor, direccionProveedor=direccionProveedor, correoProveedor=correoProveedor)
                 regProveedor.save()
                 context['mensaje'] = 'Registro creado'
@@ -257,7 +259,7 @@ def editarEquipos(request):
 
 
     # Renderizar
-    return render(request, 'equipoForm.html', context)
+    return render(request, 'administradorForm/equipoForm.html', context)
 
 # *********************************************************************************************************************
 
@@ -390,6 +392,6 @@ def editarInsumos(request):
 
 
     # Renderizar
-    return render(request, 'insumoForm.html', context)
+    return render(request, 'administradorForm/insumoForm.html', context)
 
 # *********************************************************************************************************************

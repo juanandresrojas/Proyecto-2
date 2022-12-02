@@ -328,11 +328,12 @@ function filtrardDescripEquipoFincaResp(data) {
     document.getElementById("listaEquipos").value = data["equipo"];
     document.getElementById('valorUnitarioEquipo').value = data['valorUnitarioEquipo'];
     document.getElementById('deprecEquipo').value = data['deprecEquipo'];
+    document.getElementById('descripEquipoFinca').value = data['descripEquipoFinca'];
 }
 
 function filtrarEquipoFinca() {
-    let idEquipo = document.getElementById("listaEquipos").value;
-    let listaopciones = document.getElementById("listaEquipoFinca").options;
+    let idEquipo = document.getElementById('listaEquipos').value;
+    let listaopciones = document.getElementById('listaEquipoFinca').options;
 
     let caso = 0
     if ( idEquipo > '0') caso += 1;
@@ -374,3 +375,64 @@ function filtrardDescripIndirectosResp(data) {
 }
 
 
+//+++++++++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR INSUMOS DE FINCA  +++++++++++++++++++++++++++++++++++++++++++++++++++
+
+function filtrardDatosInsumoFinca() {
+    let id = document.getElementById("listaInsumosFinca").value;
+    let url = "http://localhost:8000/gerentes/insumoFinca/";
+    let datos = {
+        'id': id,        
+    };
+    mensajeAjax(url, datos, filtrardDatosInsumoFincaResp);
+
+}
+
+function filtrardDatosInsumoFincaResp(data) {
+  document.getElementById("listaInsumos").value = data['insumo'];
+  document.getElementById("listaUnidades").value = data['unidadmedida'];
+  document.getElementById("existenciaInsumo").value = data['existenciaInsumo'];
+  document.getElementById("valorUnitarioInsumo").value =data['valorUnitarioInsumo'];
+  document.getElementById("descripInsumoFinca").value =data['descripInsumoFinca'];
+}
+
+function filtrarInsumosFinca() {
+    let idInsumos = document.getElementById('listaInsumos').value;
+    let idMedidas = document.getElementById('listaUnidades').value;
+    let listaopcionees = document.getElementById('listaInsumosFinca').options;
+
+    let caso = 0
+    if ( idInsumos > '0') caso += 1;
+    if ( idMedidas > '0') caso += 2;
+    
+    //Primero deja todo visible
+    for (let i = 1; i < listaopcionees.length; i++) {
+        listaopcionees[i].removeAttribute("hidden");
+    }
+
+    switch (caso) {
+        case 1:    //MEDIDAS >0 INSUMO = 0 : FILTRAR SOLO POR MEDIDAS
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let insumo = listaopcionees[i].dataset.insumo;
+                if (insumo != idInsumos) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+ 
+        case 2:    //INSUMOS >0 MEDIDA = 0 : FILTRA SOLO POR INSUMOS
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let medida = listaopcionees[i].dataset.medida;
+                if (medida != idMedidas) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+        case 3:   //MEDIDAS > 0, INSUMOS > 0: Filtrar por los dos
+            for (let i = 1; i < listaopcionees.length; i++) {
+                if (listaopcionees[i].dataset.medida != idMedidas  || listaopcionees[i].dataset.insumo != idInsumos) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+    }
+}

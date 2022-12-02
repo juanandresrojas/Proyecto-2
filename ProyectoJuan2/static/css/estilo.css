@@ -73,6 +73,10 @@ a:hover {
     text-align: center;
 }
 
+.separador {
+    color: blue;
+}
+
 /* *************** CUADRO DE AVISOS ************************ */
 
 .mensaje, .alarma {

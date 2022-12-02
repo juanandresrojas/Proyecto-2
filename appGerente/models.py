@@ -114,9 +114,11 @@ class EquipoFinca (models.Model):
     existenciaEquipo = models.DecimalField(max_digits=10,decimal_places=2, null=False)
     valorUnitarioEquipo = models.DecimalField(max_digits=10,decimal_places=2, null=False)
     deprecEquipo = models.DecimalField(max_digits=10,decimal_places=2, null=False)
+    descripEquipoFinca = models.CharField(max_length=100, null=True)
+
 
     def __str__(self):
-        return "{} - {}".format(self.finca, self.existenciaEquipo )
+        return "{} - {}".format(self.finca, self.descripEquipoFinca )
     class Meta:
         verbose_name_plural = "Equipo de fincas"
 
@@ -144,9 +146,10 @@ class InsumoFinca (models.Model):
     existenciaInsumo = models.DecimalField(max_digits=10, decimal_places=2, null=False)
     unidadmedida = models.ForeignKey(UnidadMedida, on_delete=models.CASCADE , null=False)
     valorUnitarioInsumo = models.DecimalField(max_digits=10, decimal_places=2, null=False)
+    descripInsumoFinca = models.CharField(max_length=100, null=True)
 
     def __str__(self):
-        return "{} - {}".format(self.finca, self.insumo )
+        return "{} - {}".format(self.finca, self.descripInsumoFinca)
     class Meta:
         verbose_name_plural = "Insumos de finca"
 

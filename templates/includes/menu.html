@@ -82,29 +82,23 @@
                          
                     
                         {% if user.rol == '2'%}
-                        <li><a class="dropdown-item" href="#">Usuarios</a></li>
-                        <li><a class="dropdown-item" href="{% url 'categHoras' %}">Categorias de horas</a></li>
-                        <li><a class="dropdown-item" href="#">Tipos de Trabajo</a></li>
-                        <li><a class="dropdown-item" href="{% url 'categMaterial' %}">Categorias de Materiales</a></li>
-                        <li><a class="dropdown-item" href="{% url 'unidadMedida' %}">Unidades de Medida</a></li>
-                        <li><a class="dropdown-item" href="{% url 'proveedor' %}">Proveedores</a></li>
-                        <li><a class="dropdown-item" href="{% url 'insumos' %}">Insumos</a></li>
-                        <li><a class="dropdown-item" href="{% url 'equipos' %}">Equipos y Herramientas</a></li>
-                        <li><a class="dropdown-item" href="#">Productos</a></li>
-
-                        
-                        {% elif user.rol == '1' %}
-                        <li><a class="dropdown-item" href="#">Asistentes de finca</a></li>
-                        <li><a class="dropdown-item" href="#">Proveedores</a></li>
-                        <li><a class="dropdown-item" href="#">Insumos</a></li>
                         <li><a class="dropdown-item" href="{% url 'equipoFinca' %}">Equipos de Finca </a></li>
                         <li><a class="dropdown-item" href="{% url 'trabajadores' %}">Trabajadores</a></li>
-                        <li><a class="dropdown-item" href="#">Productos</a></li>
                         <li><a class="dropdown-item" href="{% url 'cultivos' %}">Cultivos</a></li>
-                        <li><a class="dropdown-item" href="#">Maquinaria y Herramienta</a></li>
-                        <li><a class="dropdown-item" href="#">Insumos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'proveedor' %}">Proveedores</a></li>
+                        <li><a class="dropdown-item" href="{% url 'insumoFinca' %}">Insumos de Finca</a></li>
                         <li><a class="dropdown-item" href="#">Productos</a></li>
-                     
+                        <li><a class="dropdown-item" href="#">Usuarios</a></li>
+                        <li><a class="dropdown-item" href="#">Asistentes de finca</a></li>
+                        <li><a class="dropdown-item" href="#">Tipos de Trabajo</a></li>
+                        
+                        {% elif user.rol == '1' %}
+                        <li><a class="dropdown-item" href="{% url 'categHoras' %}">Categorias de horas en general</a></li>
+                        <li><a class="dropdown-item" href="{% url 'proveedor' %}">Proveedores en general</a></li>
+                        <li><a class="dropdown-item" href="{% url 'insumos' %}">Insumos en general </a></li>
+                        <li><a class="dropdown-item" href="{% url 'categMaterial' %}">Categorias de Materiales</a></li>
+                        <li><a class="dropdown-item" href="{% url 'unidadMedida' %}">Unidades de Medida</a></li>
+                        <li><a class="dropdown-item" href="{% url 'equipos' %}">Equipos y Herramientas en general</a></li>
                         
                         {% elif user.rol == '3' %} 
                         <li><a class="dropdown-item" href="#">Compra de Equipo y Herramienta</a></li>
@@ -122,20 +116,24 @@
 
                     {% comment %} MENU DEL SUPER USUARIO {% endcomment %}
                     {% if user.rol == '0' %}
-                    <li><a class="dropdown-item" href="#">Usuarios</a></li>
+
+                    
+                    <li class="text-center">
+                        <a class="separador">Administrador</a>
+                    </li>
                     <li><a class="dropdown-item" href="{% url 'categHoras' %}">Categorias de horas</a></li>
-                    <li><a class="dropdown-item" href="#">Tipos de Trabajo</a></li>
                     <li><a class="dropdown-item" href="{% url 'categMaterial' %}">Categorias de Materiales</a></li>
                     <li><a class="dropdown-item" href="{% url 'unidadMedida' %}">Unidades de Medida</a></li>
                     <li><a class="dropdown-item" href="{% url 'proveedor' %}">Proveedores</a></li>
                     <li><a class="dropdown-item" href="{% url 'insumos' %}">Insumos</a></li>
                     <li><a class="dropdown-item" href="{% url 'equipos' %}">Equipos y Herramientas</a></li>
-                    <li><a class="dropdown-item" href="#">Productos</a></li>
 
-                    
+                    <li class="text-center">
+                        <a class="separador">Gerente</a>
+                    </li>
                     <li><a class="dropdown-item" href="#">Asistentes de finca</a></li>
-                    <li><a class="dropdown-item" href="#">Proveedores</a></li>
-                    <li><a class="dropdown-item" href="#">Insumos</a></li>
+                    <li><a class="dropdown-item" href="{% url 'proveedor' %}">Proveedores</a></li>
+                    <li><a class="dropdown-item" href="{% url 'insumoFinca' %}">Insumos de Finca</a></li>
                     <li><a class="dropdown-item" href="{% url 'equipoFinca' %}">Equipos de Finca</a></li>
                     <li><a class="dropdown-item" href="{% url 'trabajadores' %}">Trabajadores</a></li>
                     <li><a class="dropdown-item" href="#">Productos</a></li>
@@ -144,8 +142,9 @@
                     <li><a class="dropdown-item" href="#">Insumos</a></li>
                     <li><a class="dropdown-item" href="#">Productos</a></li>
                  
-                    
-                    
+                    <li class="text-center">
+                        <a class="separador">Asistente</a>
+                    </li>
                     <li><a class="dropdown-item" href="#">Compra de Equipo y Herramienta</a></li>
                     <li><a class="dropdown-item" href="#">Compra de Insumos</a></li>
                     <li><a class="dropdown-item" href="{% url 'lotes' %}">Lotes</a></li>
