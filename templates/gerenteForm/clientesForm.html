@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+     <h2>{{ nombreForm }}</h2>
+</div>
+<div class="col-12">
+     <form action="{% url ruta %}" method="post">
+          {% csrf_token %}
+          <div class="row g-3">
+
+               <!-- LISTA CLIENTE -->
+               <label for="listaClientes" class="form-label">Lista Clientes</label>
+               <select class="form-select" name="listaClientes" id="listaClientes" onchange="filtrarCliente()">
+                    <option value="0" selected>Seleccione un Cliente</option>
+                    {% for cliente in listaClientes %}
+                    <option value="{{ cliente.id }}">{{ cliente.nombreCliente }}</option>
+                    {% endfor %}
+               </select>
+
+               <!-- NOMBRE DEL CLIENTE -->
+               <div class="col-12">
+                    <label for="nombreCliente" class="form-label">Nombre completo</label>
+                    <input type="text" name="nombreCliente" id="nombreCliente" class="form-control">
+               </div>
+
+               <!-- DOCUMENTO CLIENTE -->
+               <div class="col-12">
+                    <label for="nitCliente" class="form-label">Número de Identificación</label>
+                    <input type="number" name="nitCliente" id="nitCliente" class="form-control" placeholder="">
+               </div>
+
+               <!-- TELEFONO CLIENTE -->
+               <div class="col-12">
+                    <label for="telefonoCliente" class="form-label">Teléfono</label>
+                    <input type="number" name="telefonoCliente" id="telefonoCliente" class="form-control">
+               </div>
+
+               <!-- EMAIL CLIENTE -->
+               <div class="col-12">
+                    <label for="correoCliente" class="form-label">Correo electrónico</label>
+                    <input type="email" name="correoCliente" id="correoCliente" class="form-control"
+                         placeholder="ejemplo@ejemplo.com">
+               </div>
+
+               <!-- DIRECCIÓN DEL CLIENTE -->
+               <div class="col-12">
+                    <label for="direccionCliente" class="form-label">Dirección</label>
+                    <input type="text" name="direccionCliente" id="direccionCliente" class="form-control">
+               </div>
+
+
+               <hr class="my-4">
+               <button class="w-100 btn boton1 btn-lg" type="submit">Guardar datos</button>
+
+          </div>
+     </form>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<div class="col-12">
+    <form action="{% url ruta %}" method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            
+            <!-- SELECT DE COMPRA EQUIPO -->
+            <div class="col-12">
+                    <label for="listaCompraEquipo" class="form-label">lotes</label>
+                    <select name="listaCompraEquipo" id="listaCompraEquipo" class="form-select">
+                        <option value="0">Seleccione un Lote</option>
+                        {% for compraEquipo in listaCompraEquipo %}
+                        <option value="{{ compraEquipo.id }}">{{ compraEquipo.cantidadCompraEquipo }}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+            <!-- EQUIPOS -->
+            <div class="col-12">
+                    <label for="listaEquipo" class="form-label">Equipo</label>
+                    <select name="listaEquipo" id="listaEquipo" class="form-select">
+                        <option value="0">Seleccione un Equipo</option>
+                        {% for equipo in listaEquipo %}
+                        <option value="{{ equipo.id }}">{{ equipo.descripEquipo }}</option>
+                        {% endfor %}
+                    </select>   
+                </div>
+           
+            <!-- EQUIPO FINCA -->
+                <div class="col-12">
+                    <label for="listaEquipoFinca" class="form-label">Equipo Finca </label>
+                    <select name="listaEquipoFinca" id="listaEquipoFinca" class="form-select">
+                        <option value="0">Seleccione un Producto</option>
+                        {% for equipoFinca in listaEquipoFinca %}
+                        <option value="{{ equipoFinca.id }}">{{ equipoFinca.descripEquipoFinca }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- PROVEEDORES -->
+                <div class="col-12">
+                   <label for="listaMedidas" class="form-label">Proveedores</label>
+                   <select name="listaMedidas" id="listaMedidas" class="form-select">
+                       <option value="0">Seleccione un proveedor</option>
+                       {% for proveedor in listaMedidas %}
+                       <option value="{{ proveedor.id }}">{{ proveedor.nombreProveedor }}</option>
+                       {% endfor %}
+                   </select>
+               </div>
+
+            <!-- FECHA DE LA COMPRA DEL EQUIPO -->
+                <div class="col-12">
+                    <label for="fechaCompraEquipo" class="form-label">Fecha de la compra del equipo</label>
+                    <input type="date" name="fechaCompraEquipo" id="fechaCompraEquipo" class="form-control">
+                </div>
+
+                <!-- NUMERO DE LA FACTURA DE LA COMPRA DEL EQUIPO -->
+                <div class="col-12">
+                    <label for="numFactura" class="form-label">Numero de la factura</label>
+                    <input type="text" name="numFactura" id="numFactura" class="form-control">
+                </div>
+           
+
+            <!-- CANTIDAD DE LA COMPRA -->            
+                <div class="col-12">
+                    <label for="cantidadCompraEquipo" class="form-label">Cantidad de la compra</label>
+                    <input type="number" name="cantidadCompraEquipo" id="cantidadCompraEquipo" class="form-control">
+                </div>
+        
+
+            
+
+            {% comment %} <!-- OBSERVACIÓN DE LA COMPRA -->
+                <div class="col-12">
+                    <label for="observacCompraEquipo" class="form-label">Observación de la compra</label>
+                    <input type="text" name="observacCompraEquipo" id="observacCompraEquipo" class="form-control">
+                </div> {% endcomment %}
+          
+    </form>
+</div>
+{% endblock %}
+<!--FIN BLOQUE PRINCIPAL-->

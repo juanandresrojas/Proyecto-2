@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include 
 from . import views 
+from django.contrib.auth import views as auth_views
 
 # PARA CAMBIAR TITULOS EN MODULO DE DJANGO
 admin.site.site_header = 'Sistema Evaluador de Costos para Mypimes Agricolas - módulo Administrativo '

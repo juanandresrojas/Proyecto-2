@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="py-5 text-center">
+    <h2> Formulario de Cambio de contraseña </h2>
+</div>
+<div class="col-12">
+    <form method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="id_email" class="form-label">Correo:</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="">
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <button class="w-100 btn boton1 btn-lg" type="submit" value="Enviar">Enviar</button>
+    </form>
+</div>
+
+
+{% endblock %}

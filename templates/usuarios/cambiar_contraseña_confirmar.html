@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="py-5 text-center">
+    <h2> Nueva contraseña </h2>
+</div>
+{% if validlink %}
+    <div class="col-12">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row g-3">
+                <div class="col-12">
+                    {{ form.new_password1.errors }}
+                    <label for="id_new_password1" class="form-label">Nueva contraseña:</label>
+                    {{ form.new_password1 }}
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-12">
+                    {{ form.new_password2.errors }}
+                    <label for="id_new_password2" class="form-label">Confirme contraseña:</label>
+                    {{ form.new_password2 }}
+                </div>
+            </div>
+        
+            <hr class="my-4">
+            <button class="w-100 btn boton1 btn-lg" type="submit" value="Cambiar Contraseña">Cambiar Contraseña</button>
+        </form>
+    </div>
+{% else %}
+    <div class="py-5 text-center">
+    <h2> Enlace invalido: Este enlace ya ha sido utilizado </h2>
+    </div>
+{% endif %}
+
+{% endblock %}

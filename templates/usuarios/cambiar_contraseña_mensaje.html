@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="py-5 text-center">
+    <h2> Formulario de Cambio de contraseña </h2>
+</div>
+<div class="col-12">
+        {% csrf_token %}
+         <!-- MENSAJE CORREO -->
+        <div class="col-12" id="mensaje">
+            <h4 class="text-center"> Mira tu correo!!</h4>
+            <h4 class="text-center"> Hemos enviado un enlace para restablecer tu contraseña </h4>
+        </div>
+          <!-- FIN MENSAJE CORREO -->
+          
+</div>
+
+
+{% endblock %}

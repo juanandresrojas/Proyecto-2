@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<div class="col-12">
+    <form action="{% url ruta %}" method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            
+            <!-- UNIDAD DE MEDIDA -->
+            <div class="col-12">
+                <label for="listaMedidas" class="form-label">Unidad de medida</label>
+                <select name="listaMedidas" id="listaMedidas" onchange="filtrarProductos()" class="form-select">
+                    <option value="0">Seleccione una unidad de Medida</option>
+                    {% for medidas in listaMedidas %}
+                    <option value="{{ medidas.id }}">{{ medidas.descripUnidadMedida }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- PRODUCTOS -->
+            <div class="col-12">
+                <label for="listaProductos" class="form-label">Productos</label>
+                <select name="listaProductos" id="listaProductos" onchange="filtrardDescrpProducto()" class="form-select">
+                    <option value="0" data-material="0">Seleccione un Producto</option>
+                    {% for productos in listaProductos %}
+                    <option value="{{ productos.id }}" data-medida="{{ productos.unidadMedida__id }}">{{ productos.descripProducto }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+            <!-- DESCRIPCION DEL PRODUCTO -->
+            <div class="col-12">
+                <label for="descripProducto" class="form-label">Descripcion del Producto</label>
+                <input type="text" name="descripProducto" id="descripProducto" class="form-control">
+            </div>
+
+            <!-- EXISTENCIA DEL PRODUCTO -->            
+            <div class="col-12">
+                <label for="existenciaProducto" class="form-label">Existencia del producto</label>
+                <input type="number" name="existenciaProducto" id="existenciaProducto" class="form-control">
+            </div>
+
+            <hr class="my-4">
+                <button class="w-100 btn boton1 btn-lg" type="submit">Guardar datos</button>
+
+        </div>
+    </form>
+</div>
+{% endblock %}

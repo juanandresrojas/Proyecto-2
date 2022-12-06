@@ -436,3 +436,65 @@ function filtrarInsumosFinca() {
             break;
     }
 }
+
+//+++++++++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR PRODUCTOS +++++++++++++++++++++++++++++++++++++++++++++++++++
+function filtrardDescrpProducto() {
+    let id = document.getElementById('listaProductos').value;
+    let url = "http://localhost:8000/gerentes/productos/";
+    let datos = {
+        'id': id,        
+    };
+    mensajeAjax(url, datos, ffiltrardDescrpProductoResp);
+
+}
+
+function ffiltrardDescrpProductoResp(data) {
+    document.getElementById('listaMedidas').value = data['unidadMedida'];
+    document.getElementById('descripProducto').value = data['descripProducto'];
+    document.getElementById('existenciaProducto').value = data['existenciaProducto'];
+}
+
+function filtrarProductos() {
+    let idMedidas = document.getElementById('listaMedidas').value;
+    let listaopciones = document.getElementById('listaProductos').options;
+
+    let caso = 0
+    if ( idMedidas > '0') caso += 1;
+    
+    //Primero deja todo visible
+    for (let i = 1; i < listaopciones.length; i++) {
+        listaopciones[i].removeAttribute("hidden");
+    }
+
+    switch (caso) {
+        case 1:  //MEDIDAS > 0 : FILTRAR SOLO POR MEDIDAS
+            for (let i = 1; i < listaopciones.length; i++) {
+                let medida = listaopciones[i].dataset.medida;
+                if (medida != idMedidas) {
+                    listaopciones[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+    }
+}
+
+//+++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR CLIENTE +++++++++++++++++++++++++++++++++++++++++++++++
+function filtrarCliente() {
+    
+    let id = document.getElementById('listaClientes').value;
+    let url = "http://localhost:8000/gerentes/clientes/";
+    let datos = {
+        'id': id,        
+    };
+    mensajeAjax(url, datos, filtrarClienteResp);
+
+}
+
+function filtrarClienteResp(data) {
+    document.getElementById('nombreCliente').value = data['nombreCliente'];
+    document.getElementById('nitCliente').value = data['nitCliente'];
+    document.getElementById('telefonoCliente').value = data['telefonoCliente'];
+    document.getElementById('correoCliente').value = data['correoCliente'];
+    document.getElementById('direccionCliente').value = data['direccionCliente'];
+}
+

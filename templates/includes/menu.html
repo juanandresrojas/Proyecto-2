@@ -67,7 +67,7 @@
                 {% else %}
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Cambiar contraseña</a>
+                    <a class="nav-link" href="{% url 'password_reset' %}">Cambiar contraseña</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'salir' %}">Salir</a>
@@ -87,8 +87,9 @@
                         <li><a class="dropdown-item" href="{% url 'cultivos' %}">Cultivos</a></li>
                         <li><a class="dropdown-item" href="{% url 'proveedor' %}">Proveedores</a></li>
                         <li><a class="dropdown-item" href="{% url 'insumoFinca' %}">Insumos de Finca</a></li>
-                        <li><a class="dropdown-item" href="#">Productos</a></li>
-                        <li><a class="dropdown-item" href="#">Usuarios</a></li>
+                        <li><a class="dropdown-item" href="{% url 'productos' %}">Productos</a></li>
+                        <li><a class="dropdown-item" href="#">Maquinaria y Herramienta</a></li>
+                        <li><a class="dropdown-item" href="{% url 'clientes' %}">Clientes</a></li>
                         <li><a class="dropdown-item" href="#">Asistentes de finca</a></li>
                         <li><a class="dropdown-item" href="#">Tipos de Trabajo</a></li>
                         
@@ -136,11 +137,10 @@
                     <li><a class="dropdown-item" href="{% url 'insumoFinca' %}">Insumos de Finca</a></li>
                     <li><a class="dropdown-item" href="{% url 'equipoFinca' %}">Equipos de Finca</a></li>
                     <li><a class="dropdown-item" href="{% url 'trabajadores' %}">Trabajadores</a></li>
-                    <li><a class="dropdown-item" href="#">Productos</a></li>
+                    <li><a class="dropdown-item" href="{% url 'productos' %}">Productos</a></li>
                     <li><a class="dropdown-item" href="{% url 'cultivos' %}">Cultivos</a></li>
                     <li><a class="dropdown-item" href="#">Maquinaria y Herramienta</a></li>
-                    <li><a class="dropdown-item" href="#">Insumos</a></li>
-                    <li><a class="dropdown-item" href="#">Productos</a></li>
+                    <li><a class="dropdown-item" href="{% url 'clientes' %}">Clientes</a></li>
                  
                     <li class="text-center">
                         <a class="separador">Asistente</a>

@@ -12,9 +12,9 @@ def editarCultivos(request):
     # consultar cultivos
     regFinca = request.user.Finca
     listaLotes = Lote.objects.filter(finca=regFinca)
-    listaCultivos = Cultivo.all().filter(type=Lote.objects.get(id=listaLotes))
+    listaCultivos = Cultivo.objects.select_related('lote').filter(lote_finca=regFinca)
     listaProductos = Producto.objects.filter(finca=regFinca)
-    listaMedidas = UnidadMedida.objects.filter(finca=regFinca)
+    listaMedidas = UnidadMedida.objects.all()
     context = {
         'titulo': 'Cultivos',
         'nombreForm': 'Consultar y Editar Cultivos',
@@ -139,7 +139,6 @@ def editarLotes(request):
 
 # *****************************************************************************************************************
 
-
 def editarTrabajador(request):
     # CONSULTAR DE QUE FINCA PERTENECE EL USUARIO
     regFinca = request.user.Finca
@@ -150,7 +149,6 @@ def editarTrabajador(request):
         'titulo': 'Trabajadores',
         'ruta': 'trabajadores',
         'nombreForm': 'Editar y consultar trabajadores',
-        'ruta': 'trabajadores',
         'listaTrabajadores': listaTrabajadores
 
     }
@@ -213,7 +211,6 @@ def editarTrabajador(request):
     return render(request, 'gerenteForm/trabajadoresForm.html', context)
 
 # *****************************************************************************************************************
-
 
 def editarEquipoFinca(request):
 
@@ -294,7 +291,6 @@ def editarEquipoFinca(request):
     return render(request, 'gerenteForm/equipoFincaForm.html', context)
 
 # *****************************************************************************************************************
-
 
 def editarIndirectos(request):
 
@@ -448,3 +444,223 @@ def editarInsumoFinca(request):
             context['alarma': 'Por favor seleccione todos los datos']
    # Renderizar
     return render(request, 'gerenteForm/insumoFincaForm.html', context)
+
+#*****************************************************************************************************************
+def editarProductos(request):
+
+    # consultar lotes
+    regFinca = request.user.Finca
+
+    # consultar los datos
+    listaProductos = Producto.objects.filter(finca=regFinca).values('id', 'descripProducto', 'unidadMedida__id')
+    listaMedidas = UnidadMedida.objects.all().values('id', 'descripUnidadMedida')
+
+    # Armar context
+    context = {
+        'titulo': 'Productos',
+        'nombreForm': 'Consultar y editar Productos',
+        'ruta': 'productos',
+        'listaProductos': listaProductos,
+        'listaMedidas': listaMedidas,
+    }
+
+    # SI ES AJAX Y POST
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        if request.method == 'POST':
+            # Toma la data enviada por el cliente
+            data = json.load(request)
+            id = data.get('id')
+            # CONSULTAR REGITRO DE TRABAJADOR
+            regProducto = Producto.objects.get(id=id)
+            # Respuesta JSON
+            data = {
+                'descripProducto': regProducto.descripProducto,
+                'unidadMedida': regProducto.unidadMedida.id,
+                'existenciaProducto': regProducto.existenciaProducto,
+            }
+            return JsonResponse(data)
+
+    if request.method == 'POST':
+        # Validar datos del formulario
+        id = int(request.POST['listaProductos'])
+        descripProducto = request.POST['descripProducto']
+        listaMedidas = int(request.POST['listaMedidas'])
+        existenciaProducto = request.POST['existenciaProducto']
+
+        if len(descripProducto) > 0 and len(existenciaProducto) > 0:
+            if id > 0:
+                # MODIFICAR REGISTRO
+                existe = Producto.objects.filter(id=id).exists()
+                if existe:
+                    regUnidad = UnidadMedida.objects.get(id=listaMedidas)
+                    regProducto = Producto.objects.get(id=id)
+                    regProducto.unidadMedida = regUnidad
+                    regProducto.descripProducto = descripProducto
+                    regProducto.existenciaProducto = existenciaProducto
+                    regProducto.finca = regFinca
+                    regProducto.save()
+                    context['mensaje'] = 'Producto modificado'
+                else:
+                    context['alarma'] = 'El registro con PK = ' + \
+                        str(id) + 'no existe'
+            else:
+                regUnidad = UnidadMedida.objects.get(id=listaMedidas)
+                regProducto = Producto(unidadMedida=regUnidad, descripProducto=descripProducto,
+                            existenciaProducto=existenciaProducto, finca=regFinca)
+                regProducto.save()
+                context['mensaje'] = 'Producto creado'
+        else:
+            context['alarma': 'Por favor seleccione todos los datos']
+   # Renderizar
+    return render(request, 'gerenteForm/productoForm.html', context)
+
+#*****************************************************************************************************************
+
+def editarCompraEquipo(request):
+
+    # CONSULTAR DE QUE FINCA PERTENECE EL USUARIO
+    regFinca = request.user.Finca
+    listaCompraEquipo = Producto.objects.filter(finca=regFinca).values('id', 'cantidadCompraEquipo', 'unidadMedida__id')
+    listaEquipo = Equipo.objects.all().values('id', 'descripEquipo')
+    listaEquipoFinca = EquipoFinca.objects.filter(equipoFinca=regFinca).values('id', 'descripEquipo')
+    listaProveedores = Proveedor.objects.all().values('id', 'nombreProveedor')
+
+    # ARMAR CONTEXTO
+    context = {
+        'titulo': 'Compra de Equipos',
+        'ruta': 'compraEquipo',
+        'nombreForm': 'Ingresar compra de Equipo',
+        'listaCompraEquipo': listaCompraEquipo,
+        'listaEquipo': listaEquipo,
+        'listaEquipoFinca': listaEquipoFinca,
+        'listaProveedores': listaProveedores,
+
+    }
+
+    # SI ES AJAX Y POST
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        if request.method == 'POST':
+            # Toma la data enviada por el cliente
+            data = json.load(request)
+            id = data.get('id')
+            # CONSULTAR REGITRO DE TRABAJADOR
+            regCompraEquipo = CompraEquipo.objects.get(id=id)
+            # Respuesta JSON
+            data = {
+                'equipo': regCompraEquipo.equipo.id,
+                'equipoFinca': regCompraEquipo.equipoFinca.id,
+                'proveedor': regCompraEquipo.proveedor.id,
+                'fechaCompraEquipo': regCompraEquipo.fechaCompraEquipo,
+                'numFactura': regCompraEquipo.numFactura,
+                'cantidadCompraEquipo': regCompraEquipo.cantidadCompraEquipo,
+            }
+            return JsonResponse(data)
+
+    if request.method == 'POST':
+        listaEquipo = int(request.POST['listaEquipo'])
+        nombreTrabajador = request.POST['nombreTrabajador']
+        telefonoTrabajador = request.POST['telefonoTrabajador']
+        fechaCompraEquipo = request.POST['fechaCompraEquipo']
+        numFactura = request.POST['numFactura']
+        costoHoraTrabajador = request.POST['costoHoraTrabajador']
+        rol = request.POST['rol']
+        if len(nombreTrabajador) > 0 and len(telefonoTrabajador) > 0 and len(fechaCompraEquipo) > 0 and len(numFactura) > 0 and len(costoHoraTrabajador) > 0:
+            if id > 0:
+                # MODIFICAR REGISTRO
+                existe = Trabajador.objects.filter(id=id).exists()
+                if existe:
+                    regCompraEquipo = Trabajador.objects.get(id=id)
+                    regCompraEquipo.nombreTrabajador = nombreTrabajador
+                    regCompraEquipo.telefonoTrabajador = telefonoTrabajador
+                    regCompraEquipo.fechaCompraEquipo = fechaCompraEquipo
+                    regCompraEquipo.numFactura = numFactura
+                    regCompraEquipo.costoHoraTrabajador = costoHoraTrabajador
+                    regCompraEquipo.rol = rol
+                    regCompraEquipo.finca = regFinca
+                    regCompraEquipo.save()
+                    context['mensaje'] = 'Trabajador modificado'
+                else:
+                    context['alarma'] = 'El registro con PK = ' + \
+                        str(id) + 'no existe'
+            else:
+                # CREAR REGISTRO
+                regCompraEquipo = Trabajador(nombreTrabajador=nombreTrabajador, fechaCompraEquipo=fechaCompraEquipo, telefonoTrabajador=telefonoTrabajador,
+                                           numFactura=numFactura, costoHoraTrabajador=costoHoraTrabajador, rol=rol, finca=regFinca,)
+                regCompraEquipo.save()
+                context['mensaje'] = 'Trabajador creado'
+        else:
+            context['alarma'] = 'Debe de diligenciar todos los datos'
+    # -- en cualquier caso...
+    return render(request, 'gerenteForm/trabajadoresForm.html', context)
+
+#*****************************************************************************************************************
+
+def editarClientes(request):
+    # CONSULTAR DE QUE FINCA PERTENECE EL USUARIO
+    regFinca = request.user.Finca
+    listaClientes = Cliente.objects.filter(finca=regFinca).values()
+
+    # ARMAR CONTEXTO
+    context = {
+        'titulo': 'Clientes',
+        'ruta': 'clientes',
+        'nombreForm': 'Editar y consultar Clientes',
+        'listaClientes': listaClientes
+
+    }
+
+    # SI ES AJAX Y POST
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        if request.method == 'POST':
+            # Toma la data enviada por el cliente
+            data = json.load(request)
+            id = data.get('id')
+            # CONSULTAR REGITRO DE TRABAJADOR
+            regCliente = Cliente.objects.get(id=id)
+            # Respuesta JSON
+            data = {
+                'nombreCliente': regCliente.nombreCliente,
+                'nitCliente': regCliente.nitCliente,
+                'telefonoCliente': regCliente.telefonoCliente,
+                'correoCliente': regCliente.correoCliente,
+                'direccionCliente': regCliente.direccionCliente,
+            }
+            return JsonResponse(data)
+
+    if request.method == 'POST':
+        id = int(request.POST['listaClientes'])
+        nombreCliente = request.POST['nombreCliente']
+        nitCliente = request.POST['nitCliente']
+        telefonoCliente = request.POST['telefonoCliente']
+        correoCliente = request.POST['correoCliente']
+        direccionCliente = request.POST['direccionCliente']
+        if len(nombreCliente) > 0 and len(nitCliente) > 0 and len(telefonoCliente) > 0 and len(correoCliente) > 0 and len(direccionCliente) > 0:
+            if id > 0:
+                # MODIFICAR REGISTRO
+                existe = Cliente.objects.filter(id=id).exists()
+                if existe:
+                    regCliente = Cliente.objects.get(id=id)
+                    regCliente.nombreCliente = nombreCliente
+                    regCliente.nitCliente = nitCliente
+                    regCliente.telefonoCliente = telefonoCliente
+                    regCliente.correoCliente = correoCliente
+                    regCliente.direccionCliente = direccionCliente
+                    regCliente.finca = regFinca
+                    regCliente.save()
+                    context['mensaje'] = 'Cliente modificado'
+                else:
+                    context['alarma'] = 'El registro con PK = ' + \
+                        str(id) + 'no existe'
+            else:
+                # CREAR REGISTRO
+                regCliente = Cliente(nombreCliente=nombreCliente, telefonoCliente=telefonoCliente, nitCliente=nitCliente,
+                                           correoCliente=correoCliente, direccionCliente=direccionCliente,  finca=regFinca,)
+                regCliente.save()
+                context['mensaje'] = 'Cliente creado'
+        else:
+            context['alarma'] = 'Debe de diligenciar todos los datos'
+    # -- en cualquier caso...
+    return render(request, 'gerenteForm/clientesForm.html', context)
