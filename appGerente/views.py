@@ -12,7 +12,8 @@ def editarCultivos(request):
     # consultar cultivos
     regFinca = request.user.Finca
     listaLotes = Lote.objects.filter(finca=regFinca)
-    listaCultivos = Cultivo.objects.select_related('lote').filter(lote_finca=regFinca)
+    # listaCultivos = Cultivo.objects.select_related('lote').filter(lote_finca=regFinca)
+    listaCultivos = Cultivo.objects.prefetch_related('lote').filter(lote__finca=regFinca).values('id', 'observacCultivo', 'lote__id', 'unidadMedida__id', 'producto__id')
     listaProductos = Producto.objects.filter(finca=regFinca)
     listaMedidas = UnidadMedida.objects.all()
     context = {
@@ -25,13 +26,34 @@ def editarCultivos(request):
         'listaMedidas': listaMedidas,
 
     }
+        # SI ES AJAX Y POST
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        if request.method == 'POST':
+            # Toma la data enviada por el cliente
+            data = json.load(request)
+            id = data.get('id')
+            # CONSULTAR REGITRO DE CULTIVO
+            regCultivo = Cultivo.objects.get(id=id)
+            # Respuesta JSON
+            data = {
+                'lote': regCultivo.lote.id,
+                'unidadMedida': regCultivo.unidadMedida.id,
+                'producto': regCultivo.producto.id,
+                'fechaSiembra': regCultivo.fechaSiembra,
+                'fechaCosecha': regCultivo.fechaCosecha,
+                'cantidadCosecha': regCultivo.cantidadCosecha,
+                'observacCultivo': regCultivo.observacCultivo,
+                'activo': regCultivo.activo,
+            }
+            return JsonResponse(data)
 
     if request.method == 'POST':
         listaCultivo = int(request.POST['listaCultivos'])
         listaLotes = int(request.POST['listaLotes'])  # ID del lote
         listaProductos = int(request.POST['listaProductos'])  # ID del producto
         listaMedidas = int(request.POST['listaMedidas'])  # ID de medidas
-        activo = request.POST['activo']
+        activo = bool(request.POST['activo'])
         fechaSiembra = request.POST['fechaSiembra']
         fechaCosecha = request.POST['fechaCosecha']
         cantidadCosecha = request.POST['cantidadCosecha']
@@ -41,13 +63,14 @@ def editarCultivos(request):
         regProducto = Producto.objects.get(id=listaProductos)
         regMedidas = UnidadMedida.objects.get(id=listaMedidas)
 
-        # SI cultivo >0, entonces modificar exixtente
+        # SI cultivo == 0, entonces crear 
         if listaCultivo == 0:
             regCultivo = Cultivo(lote=regLote, producto=regProducto, activo=activo, unidadMedida=regMedidas, fechaSiembra=fechaSiembra,
                                  fechaCosecha=fechaCosecha, cantidadCosecha=cantidadCosecha, observacCultivo=observacCultivo)
             context['mensaje'] = 'Cultivo creado'
+            regCultivo.save()
         else:
-            # sino, crear nuevo
+            # sino, modifica 
             regCultivo = Cultivo.objects.get(id=listaCultivo)
             regCultivo.lote = regLote
             regCultivo.producto = regProducto
@@ -58,7 +81,7 @@ def editarCultivos(request):
             regCultivo.cantidadCosecha = cantidadCosecha
             regCultivo.observacCultivo = observacCultivo
             context['mensaje'] = 'Cultivo modificado'
-        regCultivo.save()
+            regCultivo.save()
 
     # Armar retorno
     return render(request, 'gerenteForm/cultivosForm.html', context)

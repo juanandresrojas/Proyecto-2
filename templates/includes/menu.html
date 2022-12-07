@@ -2,7 +2,7 @@
 <br>
 <div class="col-12" id="nombreUsuario">
     {% comment %} visitante {% endcomment %}
-    {% if user.id is None %}
+    {% if user.rol is None %}
     <h6 class="text-center"> Hola visitante </h6>
     
     {% comment %} Administrador {% endcomment %}
@@ -55,7 +55,7 @@
                     <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Inicio</a>
                 </li>
 
-                {% if user.id is None %}
+                {% if user.rol is None %}
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'registro' %}">Registrarse</a>

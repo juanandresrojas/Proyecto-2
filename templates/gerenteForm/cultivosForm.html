@@ -12,10 +12,10 @@
             <!-- CULTIVOS -->
             <div class="col-12">
                 <label for="listaCultivos" class="form-label">Cultivos</label>
-                <select name="listaCultivos" id="listaCultivos" class="form-select">
+                <select name="listaCultivos" id="listaCultivos" onchange="filtrardDatoscultivo()" class="form-select">
                     <option value="0">Seleccione un Cultivo</option>
                     {% for cultivo in listaCultivos %}
-                    <option value="{{ cultivo.id }}">{{ cultivo.observacCultivo }}</option>
+                    <option value="{{ cultivo.id }}" data-producto="{{ cultivo.producto__id }}" data-medida="{{ cultivo.unidadMedida__id }}" data-lote="{{ cultivo.lote__id }}" >{{ cultivo.observacCultivo }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -23,7 +23,7 @@
             <!-- PRODUCTOS -->
                 <div class="col-12">
                     <label for="listaProductos" class="form-label">Productos</label>
-                    <select name="listaProductos" id="listaProductos" class="form-select">
+                    <select name="listaProductos" id="listaProductos"  onchange="filtrarCultivo()" class="form-select">
                         <option value="0">Seleccione un Producto</option>
                         {% for producto in listaProductos %}
                         <option value="{{ producto.id }}">{{ producto.descripProducto }}</option>
@@ -34,7 +34,7 @@
             <!-- LOTES -->
             <div class="col-12">
                     <label for="listaLotes" class="form-label">lotes</label>
-                    <select name="listaLotes" id="listaLotes" class="form-select">
+                    <select name="listaLotes" id="listaLotes"  onchange="filtrarCultivo()" class="form-select">
                         <option value="0">Seleccione un Lote</option>
                         {% for lotes in listaLotes %}
                         <option value="{{ lotes.id }}">{{ lotes.descripLote }}</option>
@@ -65,7 +65,7 @@
              <!-- UNIDAD DE MEDIDA -->
              <div class="col-12">
                 <label for="listaMedidas" class="form-label">Unidad de medida</label>
-                <select name="listaMedidas" id="listaMedidas" class="form-select">
+                <select name="listaMedidas" id="listaMedidas"  onchange="filtrarCultivo()" class="form-select">
                     <option value="0">Seleccione una unidad de Medida</option>
                     {% for medidas in listaMedidas %}
                     <option value="{{ medidas.id }}">{{ medidas.descripUnidadMedida }}</option>
@@ -81,10 +81,11 @@
                 </div>
           
 
-            <!-- ACTIVO -->
+        
+                <!-- ACTIVO -->
                 <div class="col-12 text-center">
                     <label for="activo" name="activo">Activo</label>
-                    <input type="checkbox" name="activo" id="activo">
+                    <input type="checkbox" name="activo" id="activo" checked>
                 </div>
 
                 <hr class="my-4">

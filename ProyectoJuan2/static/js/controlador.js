@@ -498,3 +498,79 @@ function filtrarClienteResp(data) {
     document.getElementById('direccionCliente').value = data['direccionCliente'];
 }
 
+//+++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR CULTIVOS +++++++++++++++++++++++++++++++++++++++++++++++
+
+function filtrardDatoscultivo() {
+    let id = document.getElementById("listaCultivos").value;
+    let url = "http://localhost:8000/gerentes/cultivos/";
+    let datos = {
+        'id': id,        
+    };
+    mensajeAjax(url, datos, filtrardDatoscultivoResp);
+
+}
+
+function filtrardDatoscultivoResp(data) {
+  document.getElementById("listaMedidas").value = data['unidadMedida'];
+  document.getElementById("listaProductos").value = data['producto'];
+  document.getElementById("listaLotes").value = data['lote'];
+  document.getElementById("fechaSiembra").value =data['fechaSiembra'];
+  document.getElementById("fechaCosecha").value =data['fechaCosecha'];
+  document.getElementById("cantidadCosecha").value =data['cantidadCosecha'];
+  document.getElementById("observacCultivo").value =data['observacCultivo'];
+  document.getElementById("activo").value =data['activo'];
+}
+
+function filtrarCultivo() {
+    let idProductos = document.getElementById('listaProductos').value;
+    let idMedidas = document.getElementById('listaMedidas').value;
+    let idLotes = document.getElementById('listaLotes').value;
+    let listaopcionees = document.getElementById('listaCultivos').options;
+
+    let caso = 0
+    if ( idMedidas > '0') caso += 1;
+    if ( idProductos > '0') caso += 2;
+    if ( idLotes > '0') caso += 3;
+    
+    //Primero deja todo visible
+    for (let i = 1; i < listaopcionees.length; i++) {
+        listaopcionees[i].removeAttribute("hidden");
+    }
+
+    switch (caso) {
+        case 1:    //MEDIDAS >0, PRODUCTOS = 0, LOTES = 0 : FILTRAR SOLO POR MEDIDAS
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let medida = listaopcionees[i].dataset.medida;
+                if (medida != idMedidas) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+ 
+        case 2:    //PRODUCTOS >0, MEDIDAS = 0, LOTES = 0 : FILTRAR SOLO POR PRODUCTOS
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let producto = listaopcionees[i].dataset.producto;
+                if (producto != idProductos) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+
+        case 3:   //LOTE >0, MEDIDAS = 0, PPRODUCTO = 0 : FILTRAR SOLO POR LOTE
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let lote = listaopcionees[i].dataset.lote;
+                if (lote != idLotes) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+        
+        case 4, 5, 6:    //FILTRAR POR TODAS LAS CATEGORIAS
+            for (let i = 1; i < listaopcionees.length; i++) {
+                if (listaopcionees[i].dataset.medida != idMedidas  || listaopcionees[i].dataset.producto != idProductos || listaopcionees[i].dataset.lote != idLotes) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+    }
+}
