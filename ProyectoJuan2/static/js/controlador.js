@@ -500,17 +500,17 @@ function filtrarClienteResp(data) {
 
 //+++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR CULTIVOS +++++++++++++++++++++++++++++++++++++++++++++++
 
-function filtrardDatoscultivo() {
+function filtrarDatosCultivo() {
     let id = document.getElementById("listaCultivos").value;
     let url = "http://localhost:8000/gerentes/cultivos/";
     let datos = {
         'id': id,        
     };
-    mensajeAjax(url, datos, filtrardDatoscultivoResp);
+    mensajeAjax(url, datos, filtrarDatosCultivoResp);
 
 }
 
-function filtrardDatoscultivoResp(data) {
+function filtrarDatosCultivoResp(data) {
   document.getElementById("listaMedidas").value = data['unidadMedida'];
   document.getElementById("listaProductos").value = data['producto'];
   document.getElementById("listaLotes").value = data['lote'];
@@ -568,6 +568,83 @@ function filtrarCultivo() {
         case 4, 5, 6:    //FILTRAR POR TODAS LAS CATEGORIAS
             for (let i = 1; i < listaopcionees.length; i++) {
                 if (listaopcionees[i].dataset.medida != idMedidas  || listaopcionees[i].dataset.producto != idProductos || listaopcionees[i].dataset.lote != idLotes) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+    }
+}
+
+
+//+++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR COMPRA DE EQUIPOS +++++++++++++++++++++++++++++++++++++++++++++++
+
+function filtrarDatosCompraEquipo() {
+    let id = document.getElementById("listaCompraEquipo").value;
+    let url = "http://localhost:8000/gerentes/compraEquipo/";
+    let datos = {
+        'id': id,        
+    };
+    mensajeAjax(url, datos, filtrarDatosCompraEquipoResp);
+
+}
+
+function filtrarDatosCompraEquipoResp(data) {
+  document.getElementById("listaEquipo").value = data['equipo'];
+  document.getElementById("listaEquipoFinca").value = data['equipoFinca'];
+  document.getElementById("listaProveedores").value = data['proveedor'];
+  document.getElementById("fechaCompraEquipo").value =data['fechaCompraEquipo'];
+  document.getElementById("numFactura").value =data['numFactura'];
+  document.getElementById("cantidadCompraEquipo").value =data['cantidadCompraEquipo'];
+  document.getElementById("valorCompraEquipo").value =data['valorCompraEquipo'];
+}
+
+function filtrarCompraEquipo() {
+    let idEquipoFinca = document.getElementById('listaEquipoFinca').value;
+    let idEquipo = document.getElementById('listaEquipo').value;
+    let idProveedores = document.getElementById('listaProveedores').value;
+    let listaopcionees = document.getElementById('listaCompraEquipo').options;
+
+    let caso = 0
+    if ( idEquipo > '0') caso += 1;
+    if ( idEquipoFinca > '0') caso += 2;
+    if ( idProveedores > '0') caso += 3;
+    
+    //Primero deja todo visible
+    for (let i = 1; i < listaopcionees.length; i++) {
+        listaopcionees[i].removeAttribute("hidden");
+    }
+
+    switch (caso) {
+        case 1:    //EQUIPO >0, EQUIPOFINCA = 0, PROVEEDORES = 0 : FILTRAR SOLO POR EQUIPO
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let equipo = listaopcionees[i].dataset.equipo;
+                if (equipo != idEquipo) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+ 
+        case 2:   //PROVEEDORES >0, EQUIPO = 0, EQUIPOFINCA = 0 : FILTRAR SOLO POR PROVEEDORES
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let equipoFinca = listaopcionees[i].dataset.equipofinca;
+                if (equipoFinca != idEquipoFinca) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+
+        case 3:   //PROVEEDORES >0, EQUIPO = 0, EQUIPOFINCA = 0 : FILTRAR SOLO POR PROVEEDORES
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let proveedor = listaopcionees[i].dataset.proveedor;
+                if (proveedor != idProveedores) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+        
+        case 4, 5, 6:    //FILTRAR POR TODAS LAS CATEGORIAS
+            for (let i = 1; i < listaopcionees.length; i++) {
+                if (listaopcionees[i].dataset.equipo != idEquipo  || listaopcionees[i].dataset.equipofinca != idEquipoFinca || listaopcionees[i].dataset.proveedor != idProveedores) {
                     listaopcionees[i].setAttribute("hidden", "hidden");
                 } 
             }

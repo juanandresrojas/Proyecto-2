@@ -10,5 +10,6 @@ urlpatterns = [
     path('insumoFinca/', views.editarInsumoFinca, name='insumoFinca'),
     path('productos/', views.editarProductos, name='productos'),
     path('clientes/', views.editarClientes, name='clientes'),
+    path('compraEquipo/', views.editarCompraEquipo, name='compraEquipo'),
    
 ]

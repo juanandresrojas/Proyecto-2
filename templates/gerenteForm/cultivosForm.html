@@ -12,7 +12,7 @@
             <!-- CULTIVOS -->
             <div class="col-12">
                 <label for="listaCultivos" class="form-label">Cultivos</label>
-                <select name="listaCultivos" id="listaCultivos" onchange="filtrardDatoscultivo()" class="form-select">
+                <select name="listaCultivos" id="listaCultivos" onchange="filtrarDatosCultivo()" class="form-select">
                     <option value="0">Seleccione un Cultivo</option>
                     {% for cultivo in listaCultivos %}
                     <option value="{{ cultivo.id }}" data-producto="{{ cultivo.producto__id }}" data-medida="{{ cultivo.unidadMedida__id }}" data-lote="{{ cultivo.lote__id }}" >{{ cultivo.observacCultivo }}</option>

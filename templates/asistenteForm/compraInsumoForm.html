@@ -12,32 +12,32 @@
             
             <!-- SELECT DE COMPRA EQUIPO -->
             <div class="col-12">
-                    <label for="listaCompraEquipo" class="form-label">Lista de articulos comprados</label>
-                    <select name="listaCompraEquipo" id="listaCompraEquipo" onchange="filtrarDatosCompraEquipo()" class="form-select">
+                    <label for="listaCompraInsumo" class="form-label">Lista de articulos comprados</label>
+                    <select name="listaCompraInsumo" id="listaCompraInsumo" onchange="filtrarDatosCompraEquipo()" class="form-select">
                         <option value="0">Seleccione un Articulo comprado</option>
-                        {% for compraEquipo in listaCompraEquipo %}
-                        <option value="{{ compraEquipo.id }}" data-equipo ="{{ compraEquipo.equipo__id }}" data-equipofinca ="{{ compraEquipo.equipoFinca__id }}" data-proveedor ="{{ compraEquipo.proveedor__id }}">{{ compraEquipo.numFactura }}</option>
+                        {% for compraInsumo in listaCompraInsumo %}
+                        <option value="{{ compraInsumo.id }}" data-insumo ="{{ compraInsumo.insumo__id }}" data-insumofinca ="{{ compraInsumo.insumoFinca__id }}" data-proveedor ="{{ compraInsumo.proveedor__id }}">{{ compraInsumo.numFactura }}</option>
                         {% endfor %}
                     </select>
             </div>
             <!-- EQUIPOS -->
             <div class="col-12">
-                    <label for="listaEquipo" class="form-label">Equipo</label>
-                    <select name="listaEquipo" id="listaEquipo" onchange="filtrarCompraEquipo()" class="form-select">
-                        <option value="0">Seleccione un Equipo</option>
-                        {% for equipo in listaEquipo %}
-                        <option value="{{ equipo.id }}">{{ equipo.descripEquipo }}</option>
+                    <label for="listaInsumo" class="form-label">Insumo</label>
+                    <select name="listaInsumo" id="listaInsumo" onchange="filtrarCompraEquipo()" class="form-select">
+                        <option value="0">Seleccione un Insumo</option>
+                        {% for insumo in listaInsumo %}
+                        <option value="{{ insumo.id }}">{{ equipo.descripInsumo }}</option>
                         {% endfor %}
                     </select>   
             </div>
            
                 <!-- EQUIPO FINCA -->
             <div class="col-12">
-                    <label for="listaEquipoFinca" class="form-label">Equipo Finca </label>
-                    <select name="listaEquipoFinca" id="listaEquipoFinca" onchange="filtrarCompraEquipo()" class="form-select">
+                    <label for="listaInsumoFinca" class="form-label">Insumo Finca </label>
+                    <select name="listaInsumoFinca" id="listaInsumoFinca" onchange="filtrarCompraEquipo()" class="form-select">
                         <option value="0">Seleccione un Producto</option>
-                        {% for equipoFinca in listaEquipoFinca %}
-                        <option value="{{ equipoFinca.id }}">{{ equipoFinca.descripEquipoFinca }}</option>
+                        {% for insumoFinca in listaInsumoFinca %}
+                        <option value="{{ insumoFinca.id }}">{{ insumoFinca.descripInsumoFinca }}</option>
                         {% endfor %}
                     </select>
             </div>
@@ -55,8 +55,8 @@
 
                 <!-- FECHA DE LA COMPRA DEL EQUIPO -->
             <div class="col-12">
-                    <label for="fechaCompraEquipo" class="form-label">Fecha de la compra del equipo</label>
-                    <input type="date" name="fechaCompraEquipo" id="fechaCompraEquipo" class="form-control">
+                    <label for="fechaCompraInsumo" class="form-label">Fecha de la compra del insumo</label>
+                    <input type="date" name="fechaCompraInsumo" id="fechaCompraInsumo" class="form-control">
             </div>
 
                 <!-- NUMERO DE LA FACTURA DE LA COMPRA DEL EQUIPO -->
@@ -68,16 +68,15 @@
 
                 <!-- CANTIDAD DE LA COMPRA -->            
             <div class="col-12">
-                    <label for="cantidadCompraEquipo" class="form-label">Cantidad de la compra</label>
-                    <input type="number" name="cantidadCompraEquipo" id="cantidadCompraEquipo" class="form-control">
+                    <label for="cantidadCompraInsumo" class="form-label">Cantidad de la compra</label>
+                    <input type="number" name="cantidadCompraInsumo" id="cantidadCompraInsumo" class="form-control">
             </div>
 
-
-             <!-- VALOR DE LA COMPRA -->            
-             <div class="col-12">
-                <label for="valorCompraEquipo" class="form-label">Valor de la compra</label>
-                <input type="number" name="valorCompraEquipo" id="valorCompraEquipo" class="form-control">
-        </div>
+            <!-- VALOR DE LA COMPRA -->            
+            <div class="col-12">
+                    <label for="valorCompraInsumo" class="form-label">Valor de la compra</label>
+                    <input type="number" name="valorCompraInsumo" id="valorCompraInsumo" class="form-control">
+            </div>
         
 
             

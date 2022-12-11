@@ -102,7 +102,7 @@
                         <li><a class="dropdown-item" href="{% url 'equipos' %}">Equipos y Herramientas en general</a></li>
                         
                         {% elif user.rol == '3' %} 
-                        <li><a class="dropdown-item" href="#">Compra de Equipo y Herramienta</a></li>
+                        <li><a class="dropdown-item" href="{% url 'compraEquipo' %}">Compra de Equipo y Herramienta</a></li>
                         <li><a class="dropdown-item" href="#">Compra de Insumos</a></li>
                         <li><a class="dropdown-item" href="{% url 'lotes' %}">Lotes</a></li>
                         <li><a class="dropdown-item" href="#">Siembras de cultivos</a></li>
@@ -145,7 +145,7 @@
                     <li class="text-center">
                         <a class="separador">Asistente</a>
                     </li>
-                    <li><a class="dropdown-item" href="#">Compra de Equipo y Herramienta</a></li>
+                    <li><a class="dropdown-item" href="{% url 'compraEquipo' %}">Compra de Equipo y Herramienta</a></li>
                     <li><a class="dropdown-item" href="#">Compra de Insumos</a></li>
                     <li><a class="dropdown-item" href="{% url 'lotes' %}">Lotes</a></li>
                     <li><a class="dropdown-item" href="#">Siembras de cultivos</a></li>

@@ -131,6 +131,8 @@ class CompraEquipo (models.Model):
     fechaCompraEquipo = models.DateField(null=False)
     numFactura = models.CharField(max_length=15, null=False)
     cantidadCompraEquipo = models.DecimalField(max_digits=12,decimal_places=2, null=False)
+    valorCompraEquipo = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+
 
     def __str__(self):
         return "{} - {}".format(self.equcultivopoFinca, self.proveedor )
