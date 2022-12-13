@@ -11,5 +11,10 @@ urlpatterns = [
     path('productos/', views.editarProductos, name='productos'),
     path('clientes/', views.editarClientes, name='clientes'),
     path('compraEquipo/', views.editarCompraEquipo, name='compraEquipo'),
+    path('CompraInsumo/', views.editarCompraInsumo, name='CompraInsumo'),
+    path('equiposLabor/', views.editarEquiposLabor, name='equiposlabor'),
+    path('insumoLabor/', views.editarInsumoLabor, name='insumoLabor'),
+    path('horaTrabajo/', views.editarHorasTrabajo, name='horaTrabajo'),
+    path('ventas/', views.editarVentas, name='ventas'),
    
 ]

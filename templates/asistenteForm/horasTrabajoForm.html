@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<div class="col-12">
+    <form action="{% url ruta %}" method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+
+            <!-- HORAS TRABAJO  -->
+            <div class="col-12">
+                <label for="listaHorasTrabajo" class="form-label">Horas Trabajo</label>
+                <select name="listaHorasTrabajo" id="listaHorasTrabajo" onchange="filtrarDatosHoraTrabajo()" class="form-select">
+                    <option value="0">Seleccione una Hora de Trabajo</option>
+                    {% for horasTrabajo in listaHorasTrabajo %}
+                    <option value="{{ horasTrabajo.id }}" data-categhora ="{{ horasTrabajo.categHora__id }}" data-trabajador ="{{ horasTrabajo.trabajador__id }}" data-cultivo ="{{ horasTrabajo.cultivo__id }}">{{ horasTrabajo.observacLabor }}</option>
+                    {% endfor %} 
+                </select>
+            </div>
+
+
+           <!-- CULTIVOS -->
+           <div class="col-12">
+                <label for="listaCultivos" class="form-label">Cultivos</label>
+                <select name="listaCultivos" id="listaCultivos" onchange="filtrarHorasTrabajo()" class="form-select">
+                    <option value="0">Seleccione un Cultivo</option>
+                    {% for cultivo in listaCultivos %}
+                    <option value="{{ cultivo.id }}" >{{ cultivo.observacCultivo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- OBSERV LABOR -->            
+            <div class="col-12">
+                    <label for="observacLabor" class="form-label">Observacion De La Labor</label>
+                    <input type="text" name="observacLabor" id="observacLabor" class="form-control">
+            </div>
+
+            <!-- TIPO DE TRABAJO -->    
+            <div class="col-12">
+                <label for="tipoTrabajo" class="form-label">Tipo De Trabajo</label>
+                <input type="text" name="tipoTrabajo" id="tipoTrabajo" class="form-control">
+            </div>
+
+            <!-- CATEG HORA -->
+            <div class="col-12">
+                    <label for="listaCategHora" class="form-label">Categoria De Hora</label>
+                    <select name="listaCategHora" id="listaCategHora" onchange="filtrarHorasTrabajo()" class="form-select">
+                        <option value="0">Seleccione Una Categoria De Hora</option>
+                        {% for categHora in listaCategHora %}
+                        <option value="{{ categHora.id }}">{{ categHora.descripCategHora }}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+
+             <!-- FECHA DE LA LABOR -->
+             <div class="col-12">
+                <label for="fechaLabor" class="form-label">Fecha De La Labor</label>
+                <input type="date" name="fechaLabor" id="fechaLabor" class="form-control">
+            </div>
+                
+
+             <!-- DURACION DE LA LABOR -->            
+             <div class="col-12">
+                <label for="duracionLabor" class="form-label">Duracion De La Labor</label>
+                <input type="number" name="duracionLabor" id="duracionLabor" class="form-control">
+            </div>
+
+             <!-- TRABAJADOR -->
+             <div class="col-12">
+                <label for="listaTrabajador" class="form-label">Trabajador</label>
+                <select name="listaTrabajador" id="listaTrabajador" onchange="filtrarHorasTrabajo()" class="form-select">
+                    <option value="0">Seleccione Un Trabajador</option>
+                    {% for trabajador in listaTrabajador %}
+                    <option value="{{ trabajador.id }}">{{ trabajador.nombreTrabajador }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- COSTO DE HORA DE TRABAJO -->            
+            <div class="col-12">
+                <label for="costo" class="form-label">Costo</label>
+                <input type="number" name="costo" id="costo" class="form-control">
+            </div>
+        
+
+            <hr class="my-4">
+            <button class="w-100 btn boton1 btn-lg" type="submit">Guardar datos</button>
+            
+        </div>
+    </form>
+</div>
+{% endblock %}
+<!--FIN BLOQUE PRINCIPAL-->

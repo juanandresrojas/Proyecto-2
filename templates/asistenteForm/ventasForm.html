@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<div class="col-12">
+    <form action="{% url ruta %}" method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+
+            <!-- VENTAS  -->
+            <div class="col-12">
+                <label for="listaVentas" class="form-label">Ventas</label>
+                <select name="listaVentas" id="listaVentas" onchange="filtrarDatosVentas()" class="form-select">
+                    <option value="0">Seleccione Una Venta</option>
+                    {% for ventas in listaVentas %}
+                    <option value="{{ ventas.id }}" data-producto ="{{ ventas.producto__id }}" data-cliente ="{{ ventas.cliente__id }}" >{{ ventas.observacVenta }}</option>
+                    {% endfor %} 
+                </select>
+            </div>
+
+
+           <!-- PRODUCTOS -->
+           <div class="col-12">
+                <label for="listaProducto" class="form-label">Producto</label>
+                <select name="listaProducto" id="listaProducto" onchange="filtrarVentas()" class="form-select">
+                    <option value="0">Seleccione un Producto</option>
+                    {% for producto in listaProducto %}
+                    <option value="{{ producto.id }}" >{{ producto.descripProducto }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- NUMERO DE LA FACTURA -->            
+            <div class="col-12">
+               <label for="numFactura" class="form-label">Numero De La Factura</label>
+               <input type="number" name="numFactura" id="numFactura" class="form-control">
+            </div>
+            
+            <!-- FECHA DE LA VENTAR -->
+            <div class="col-12">
+               <label for="fechaventa" class="form-label">Fecha De La Venta</label>
+               <input type="date" name="fechaventa" id="fechaventa" class="form-control">
+           </div>
+
+           <!-- CLIENTES -->
+           <div class="col-12">
+                   <label for="listaCliente" class="form-label">Clientes</label>
+                   <select name="listaCliente" id="listaCliente" onchange="filtrarVentas()" class="form-select">
+                       <option value="0">Seleccione Un Cliente</option>
+                       {% for cliente in listaCliente %}
+                       <option value="{{ cliente.id }}">{{ cliente.nombreCliente }}</option>
+                       {% endfor %}
+                   </select>
+           </div>
+
+           <!-- CANTIDAD DE LA VENTA -->            
+           <div class="col-12">
+               <label for="cantidadVenta" class="form-label">Cantidad De la Venta</label>
+               <input type="number" name="cantidadVenta" id="cantidadVenta" class="form-control">
+           </div>
+       
+            <!-- OBSERV VENTA -->            
+            <div class="col-12">
+                    <label for="observacVenta" class="form-label">Observacion De La Venta</label>
+                    <input type="text" name="observacVenta" id="observacVenta" class="form-control">
+            </div>
+
+             <!-- VALOR TOTAL DE VENTAS -->            
+           <div class="col-12">
+            <label for="valorTotalVentas" class="form-label">Valor Total De Ventas</label>
+            <input type="number" name="valorTotalVentas" id="valorTotalVentas" class="form-control">
+            </div>
+          
+
+
+            <hr class="my-4">
+            <button class="w-100 btn boton1 btn-lg" type="submit">Guardar datos</button>
+            
+        </div>
+    </form>
+</div>
+{% endblock %}
+<!--FIN BLOQUE PRINCIPAL-->

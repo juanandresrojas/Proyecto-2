@@ -624,7 +624,7 @@ function filtrarCompraEquipo() {
             }
             break;
  
-        case 2:   //PROVEEDORES >0, EQUIPO = 0, EQUIPOFINCA = 0 : FILTRAR SOLO POR PROVEEDORES
+        case 2:   //EQUPO FINCA >0, EQUIPO = 0, PROVEEDORES = 0 : FILTRAR SOLO POR EQUIPO FINCA
             for (let i = 1; i < listaopcionees.length; i++) {
                 let equipoFinca = listaopcionees[i].dataset.equipofinca;
                 if (equipoFinca != idEquipoFinca) {
@@ -645,6 +645,352 @@ function filtrarCompraEquipo() {
         case 4, 5, 6:    //FILTRAR POR TODAS LAS CATEGORIAS
             for (let i = 1; i < listaopcionees.length; i++) {
                 if (listaopcionees[i].dataset.equipo != idEquipo  || listaopcionees[i].dataset.equipofinca != idEquipoFinca || listaopcionees[i].dataset.proveedor != idProveedores) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+    }
+}
+
+//+++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR COMPRA DE INSUMOS +++++++++++++++++++++++++++++++++++++++++++++++
+
+function filtrarDatosCompraInsumo() {
+    let id = document.getElementById("listaCompraInsumo").value;
+    let url = "http://localhost:8000/gerentes/CompraInsumo/";
+    let datos = {
+        'id': id,        
+    };
+    mensajeAjax(url, datos, filtrarDatosCompraInsumoResp);
+
+}
+
+function filtrarDatosCompraInsumoResp(data) {
+  document.getElementById("listaInsumo").value = data['insumo'];
+  document.getElementById("listaInsumoFinca").value = data['insumoFinca'];
+  document.getElementById("listaProveedores").value = data['proveedor'];
+  document.getElementById("cantidadCompraInsumo").value =data['cantidadCompraInsumo'];
+  document.getElementById("fechaCompraInsumo").value =data['fechaCompraInsumo'];
+  document.getElementById("numFactura").value =data['numFactura'];
+  document.getElementById("valorCompraInsumo").value =data['valorCompraInsumo'];
+}
+
+function filtrarCompraInsumo() {
+    let idInsumoFinca = document.getElementById('listaInsumoFinca').value;
+    let idInsumo = document.getElementById('listaInsumo').value;
+    let idProveedores = document.getElementById('listaProveedores').value;
+    let listaopcionees = document.getElementById('listaCompraInsumo').options;
+
+    let caso = 0
+    if ( idInsumo > '0') caso += 1;
+    if ( idInsumoFinca > '0') caso += 2;
+    if ( idProveedores > '0') caso += 3;
+    
+    //Primero deja todo visible
+    for (let i = 1; i < listaopcionees.length; i++) {
+        listaopcionees[i].removeAttribute("hidden");
+    }
+
+    switch (caso) {
+        case 1:    //INSUMO >0, INSUMO FINCA = 0, PROVEEDORES = 0 : FILTRAR SOLO POR INSUMO
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let insumo = listaopcionees[i].dataset.insumo;
+                if (insumo != idInsumo) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+ 
+        case 2:   //INSUMO FINCA >0, EQUIPO = 0, INSUMO = 0 : FILTRAR SOLO POR INSUMO FINCA
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let equipofinca = listaopcionees[i].dataset.equipofinca;
+                if (equipofinca != idEquipoFinca) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+        break;
+        case 3:   //PROVEEDORES >0, EQUIPO = 0, INSUMO FINCA = 0 : FILTRAR SOLO POR INSUMO
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let proveedor = listaopcionees[i].dataset.proveedor;
+                if (proveedor != idProveedores) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+        
+        case 4, 5, 6:    //FILTRAR POR TODAS LAS CATEGORIAS
+            for (let i = 1; i < listaopcionees.length; i++) {
+                if (listaopcionees[i].dataset.insumo != idInsumo  || listaopcionees[i].dataset.insumofinca != idInsumoFinca || listaopcionees[i].dataset.proveedor != idProveedores) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+    }
+}
+
+//+++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR LABORES DE EQUIPOS +++++++++++++++++++++++++++++++++++++++++++++++
+
+function filtrarDatosLaborEquipos() {
+    let id = document.getElementById("listaEquipoLabor").value;
+    let url = "http://localhost:8000/gerentes/equiposLabor/";
+    let datos = {
+        'id': id,        
+    };
+    mensajeAjax(url, datos, filtrarDatosLaborEquiposResp);
+
+}
+
+function filtrarDatosLaborEquiposResp(data) {
+  document.getElementById("listaCultivos").value = data['cultivo'];
+  document.getElementById("listaEquipoFinca").value = data['equipoFinca'];
+  document.getElementById("cantidadUsadaEquipo").value =data['cantidadUsadaEquipo'];
+  document.getElementById("costo").value =data['costo'];
+}
+
+function filtrarLaborEquipo() {
+    let idEquipoFinca = document.getElementById('listaEquipoFinca').value;
+    let idCultivo = document.getElementById('listaCultivos').value;
+    let listaopcionees = document.getElementById('listaEquipoLabor').options;
+
+    let caso = 0
+    if ( idCultivo > '0') caso += 1;
+    if ( idEquipoFinca > '0') caso += 2;
+    
+    //Primero deja todo visible
+    for (let i = 1; i < listaopcionees.length; i++) {
+        listaopcionees[i].removeAttribute("hidden");
+    }
+
+    switch (caso) {
+        case 1:    //CULTIVO > 0 FILTRAR SOLO POR CULTIVOS:
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let cultivo = listaopcionees[i].dataset.cultivo;
+                if (cultivo != idCultivo) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+ 
+        case 2:   //EQUIPOS DE FINCA >0 FILTRAR SOLO POR EQUIPO DE FINCA:
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let equipofinca = listaopcionees[i].dataset.equipofinca;
+                if (equipofinca != idEquipoFinca) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+
+        
+        case 3:    //FILTRAR POR TODAS LAS CATEGORIAS
+            for (let i = 1; i < listaopcionees.length; i++) {
+                if (listaopcionees[i].dataset.cultivo != idCultivo  || listaopcionees[i].dataset.equipofinca != idEquipoFinca) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+    }
+}
+
+
+//+++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR LABORES DE INSUMOS +++++++++++++++++++++++++++++++++++++++++++++++
+
+function filtrarDatosLaborInsumo() {
+    let id = document.getElementById("listaInsumoLabor").value;
+    let url = "http://localhost:8000/gerentes/insumoLabor/";
+    let datos = {
+        'id': id,        
+    };
+    mensajeAjax(url, datos, filtrarDatosLaborInsumoResp);
+
+}
+
+function filtrarDatosLaborInsumoResp(data) {
+  document.getElementById("listaCultivos").value = data['cultivo'];
+  document.getElementById("listaInsumosFinca").value = data['insumoFinca'];
+  document.getElementById("cantidadUsadaInsumo").value =data['cantidadUsadaInsumo'];
+  document.getElementById("costo").value =data['costo'];
+}
+
+function filtrarLaborInsumo() {
+    let idInsumoFinca = document.getElementById('listaInsumosFinca').value;
+    let idCultivo = document.getElementById('listaCultivos').value;
+    let listaopcionees = document.getElementById('listaInsumoLabor').options;
+
+    let caso = 0
+    if ( idCultivo > '0') caso += 1;
+    if ( idInsumoFinca > '0') caso += 2;
+    
+    //Primero deja todo visible
+    for (let i = 1; i < listaopcionees.length; i++) {
+        listaopcionees[i].removeAttribute("hidden");
+    }
+
+    switch (caso) {
+        case 1:    //CULTIVO > 0 FILTRAR SOLO POR CULTIVOS:
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let cultivo = listaopcionees[i].dataset.cultivo;
+                if (cultivo != idCultivo) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+ 
+        case 2:   //INSUMOS DE FINCA >0 FILTRAR SOLO POR INSUMOS DE FINCA:
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let insumofinca = listaopcionees[i].dataset.insumofinca;
+                if (insumofinca != idInsumoFinca) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+
+        
+        case 3:    //FILTRAR POR TODAS LAS CATEGORIAS
+            for (let i = 1; i < listaopcionees.length; i++) {
+                if (listaopcionees[i].dataset.cultivo != idCultivo  || listaopcionees[i].dataset.insumofinca != idInsumoFinca) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+    }
+}
+
+
+//+++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR HORAS DE TRABAJO +++++++++++++++++++++++++++++++++++++++++++++++
+
+function filtrarDatosHoraTrabajo() {
+    let id = document.getElementById("listaHorasTrabajo").value;
+    let url = "http://localhost:8000/gerentes/horaTrabajo/";
+    let datos = {
+        'id': id,        
+    };
+    mensajeAjax(url, datos, filtrarDatosHoraTrabajoResp);
+
+}
+
+function filtrarDatosHoraTrabajoResp(data) {
+  document.getElementById("listaCultivos").value = data['cultivo'];
+  document.getElementById("listaCategHora").value = data['categHora'];
+  document.getElementById("listaTrabajador").value = data['trabajador'];
+  document.getElementById("duracionLabor").value =data['duracionLabor'];
+  document.getElementById("fechaLabor").value =data['fechaLabor'];
+  document.getElementById("costo").value =data['costo'];
+  document.getElementById("tipoTrabajo").value =data['tipoTrabajo'];
+  document.getElementById("observacLabor").value =data['observacLabor'];
+}
+
+function filtrarHorasTrabajo() {
+    let idCultivo = document.getElementById('listaCultivos').value;
+    let idCategHora = document.getElementById('listaCategHora').value;
+    let idTrabajador = document.getElementById('listaTrabajador').value;
+    let listaopcionees = document.getElementById('listaHorasTrabajo').options;
+
+    let caso = 0
+    if ( idCategHora > '0') caso += 1;
+    if ( idCultivo > '0') caso += 2;
+    if ( idTrabajador > '0') caso += 3;
+    
+    //Primero deja todo visible
+    for (let i = 1; i < listaopcionees.length; i++) {
+        listaopcionees[i].removeAttribute("hidden");
+    }
+
+    switch (caso) {
+        case 1:    //CATEGHORA >0, CATEG HORA = 0, TRABAJADORES = 0 : FILTRAR SOLO POR CATEGHORA
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let categHora = listaopcionees[i].dataset.categhora;
+                if (categHora != idCategHora) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+ 
+        case 2:   //CULTIVO >0, CATEG HORA = 0, TRABAJADOR = 0 : FILTRAR SOLO POR CULTIVO
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let cultivo = listaopcionees[i].dataset.cultivo;
+                if (cultivo != idCultivo) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+
+        case 3:   //PROVEEDORES >0, EQUIPO = 0, EQUIPOFINCA = 0 : FILTRAR SOLO POR PROVEEDORES
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let trabajador = listaopcionees[i].dataset.trabajador;
+                if (trabajador != idTrabajador) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+        
+        case 4, 5, 6:    //FILTRAR POR TODAS LAS CATEGORIAS
+            for (let i = 1; i < listaopcionees.length; i++) {
+                if (listaopcionees[i].dataset.categhora != idCategHora  || listaopcionees[i].dataset.cultivo != idCultivo || listaopcionees[i].dataset.trabajador != idTrabajador) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+    }
+}
+
+//+++++++++++++++++++++++++++++++++++ CONSULTAR Y FILTRAR VENTAS +++++++++++++++++++++++++++++++++++++++++++++++
+
+function filtrarDatosVentas() {
+    let id = document.getElementById("listaVentas").value;
+    let url = "http://localhost:8000/gerentes/ventas/";
+    let datos = {
+        'id': id,        
+    };
+    mensajeAjax(url, datos, filtrarDatosVentasResp);
+
+}
+
+function filtrarDatosVentasResp(data) {
+  document.getElementById("listaProducto").value = data['producto'];
+  document.getElementById("listaCliente").value = data['cliente'];
+  document.getElementById("numFactura").value =data['numFactura'];
+  document.getElementById("fechaventa").value =data['fechaventa'];
+  document.getElementById("cantidadVenta").value =data['cantidadVenta'];
+  document.getElementById("observacVenta").value =data['observacVenta'];
+  document.getElementById("valorTotalVentas").value =data['valorTotalVentas'];
+}
+
+function filtrarVentas() {
+    let idCliente = document.getElementById('listaCliente').value;
+    let idProducto = document.getElementById('listaProducto').value;
+    let listaopcionees = document.getElementById('listaVentas').options;
+
+    let caso = 0
+    if ( idProducto > '0') caso += 1;
+    if ( idCliente > '0') caso += 2;
+    
+    //Primero deja todo visible
+    for (let i = 1; i < listaopcionees.length; i++) {
+        listaopcionees[i].removeAttribute("hidden");
+    }
+
+    switch (caso) {
+        case 1:    //PRODUCTO > 0 FILTRAR SOLO POR PRODUCTO:
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let producto = listaopcionees[i].dataset.producto;
+                if (producto != idProducto) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+ 
+        case 2:   //CLIENTE >0 FILTRAR SOLO POR EQUIPO DE CLIENTE:
+            for (let i = 1; i < listaopcionees.length; i++) {
+                let cliente = listaopcionees[i].dataset.cliente;
+                if (cliente != idCliente) {
+                    listaopcionees[i].setAttribute("hidden", "hidden");
+                } 
+            }
+            break;
+
+        
+        case 3:    //FILTRAR POR TODAS LAS CATEGORIAS
+            for (let i = 1; i < listaopcionees.length; i++) {
+                if (listaopcionees[i].dataset.producto != idProducto  || listaopcionees[i].dataset.cliente != idCliente) {
                     listaopcionees[i].setAttribute("hidden", "hidden");
                 } 
             }

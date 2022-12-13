@@ -103,15 +103,16 @@
                         
                         {% elif user.rol == '3' %} 
                         <li><a class="dropdown-item" href="{% url 'compraEquipo' %}">Compra de Equipo y Herramienta</a></li>
-                        <li><a class="dropdown-item" href="#">Compra de Insumos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'CompraInsumo' %}">Compra de Insumos</a></li>
                         <li><a class="dropdown-item" href="{% url 'lotes' %}">Lotes</a></li>
                         <li><a class="dropdown-item" href="#">Siembras de cultivos</a></li>
-                        <li><a class="dropdown-item" href="#">Registrar Labores</a></li>
-                        <li><a class="dropdown-item" href="#">Registrar Insumos utilizados</a></li>
+                        <li><a class="dropdown-item" href="{% url 'horaTrabajo' %}">Registrar Horas De Trabajo</a></li>
+                        <li><a class="dropdown-item" href="{% url 'insumoLabor' %}">Registrar Insumos utilizados</a></li>
+                        <li><a class="dropdown-item" href="{% url 'equiposlabor' %}">Registrar Equipos utilizados</a></li>
                         <li><a class="dropdown-item" href="#">Registrar Uso de Maquinaria</a></li>
                         <li><a class="dropdown-item" href="{% url 'indirectos' %}">Registrar Costos Indirectos</a></li>
                         <li><a class="dropdown-item" href="#">Registrar Recoleccion de Cosecha</a></li>
-                        <li><a class="dropdown-item" href="#">Registrar Venta de Productos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'ventas' %}">Registrar Venta de Productos</a></li>
                         
                         {% endif %}
 
@@ -146,15 +147,16 @@
                         <a class="separador">Asistente</a>
                     </li>
                     <li><a class="dropdown-item" href="{% url 'compraEquipo' %}">Compra de Equipo y Herramienta</a></li>
-                    <li><a class="dropdown-item" href="#">Compra de Insumos</a></li>
+                    <li><a class="dropdown-item" href="{% url 'CompraInsumo' %}">Compra de Insumos</a></li>
                     <li><a class="dropdown-item" href="{% url 'lotes' %}">Lotes</a></li>
                     <li><a class="dropdown-item" href="#">Siembras de cultivos</a></li>
-                    <li><a class="dropdown-item" href="#">Registrar Labores</a></li>
-                    <li><a class="dropdown-item" href="#">Registrar Insumos utilizados</a></li>
+                    <li><a class="dropdown-item" href="{% url 'horaTrabajo' %}">Registrar Horas De Trabajo</a></li>
+                    <li><a class="dropdown-item" href="{% url 'insumoLabor' %}">Registrar Insumos utilizados</a></li>
+                    <li><a class="dropdown-item" href="{% url 'equiposlabor' %}">Registrar Equipos utilizados</a></li>
                     <li><a class="dropdown-item" href="#">Registrar Uso de Maquinaria</a></li>
                     <li><a class="dropdown-item" href="{% url 'indirectos' %}">Registrar Costos Indirectos</a></li>
                     <li><a class="dropdown-item" href="#">Registrar Recoleccion de Cosecha</a></li>
-                    <li><a class="dropdown-item" href="#">Registrar Venta de Productos</a></li>                   
+                    <li><a class="dropdown-item" href="{% url 'ventas' %}">Registrar Venta de Productos</a></li>                   
                     {% endif %}
                     {% comment %} FIN MENU DEL SUPER USUARIO {% endcomment %}
                                                               

@@ -10,31 +10,31 @@
         {% csrf_token %}
         <div class="row g-3">
             
-            <!-- SELECT DE COMPRA EQUIPO -->
+            <!-- SELECT DE COMPRA INSUMO -->
             <div class="col-12">
                     <label for="listaCompraInsumo" class="form-label">Lista de articulos comprados</label>
-                    <select name="listaCompraInsumo" id="listaCompraInsumo" onchange="filtrarDatosCompraEquipo()" class="form-select">
+                    <select name="listaCompraInsumo" id="listaCompraInsumo" onchange="filtrarDatosCompraInsumo()" class="form-select">
                         <option value="0">Seleccione un Articulo comprado</option>
                         {% for compraInsumo in listaCompraInsumo %}
                         <option value="{{ compraInsumo.id }}" data-insumo ="{{ compraInsumo.insumo__id }}" data-insumofinca ="{{ compraInsumo.insumoFinca__id }}" data-proveedor ="{{ compraInsumo.proveedor__id }}">{{ compraInsumo.numFactura }}</option>
                         {% endfor %}
                     </select>
             </div>
-            <!-- EQUIPOS -->
+            <!-- INSUMO -->
             <div class="col-12">
                     <label for="listaInsumo" class="form-label">Insumo</label>
-                    <select name="listaInsumo" id="listaInsumo" onchange="filtrarCompraEquipo()" class="form-select">
+                    <select name="listaInsumo" id="listaInsumo" onchange="filtrarCompraInsumo()" class="form-select">
                         <option value="0">Seleccione un Insumo</option>
                         {% for insumo in listaInsumo %}
-                        <option value="{{ insumo.id }}">{{ equipo.descripInsumo }}</option>
+                        <option value="{{ insumo.id }}">{{ insumo.descripInsumo }}</option>
                         {% endfor %}
                     </select>   
             </div>
            
-                <!-- EQUIPO FINCA -->
+                <!-- INSUMO FINCA -->
             <div class="col-12">
                     <label for="listaInsumoFinca" class="form-label">Insumo Finca </label>
-                    <select name="listaInsumoFinca" id="listaInsumoFinca" onchange="filtrarCompraEquipo()" class="form-select">
+                    <select name="listaInsumoFinca" id="listaInsumoFinca" onchange="filtrarCompraInsumo()" class="form-select">
                         <option value="0">Seleccione un Producto</option>
                         {% for insumoFinca in listaInsumoFinca %}
                         <option value="{{ insumoFinca.id }}">{{ insumoFinca.descripInsumoFinca }}</option>
@@ -45,7 +45,7 @@
                 <!-- PROVEEDORES -->
             <div class="col-12">
                    <label for="listaProveedores" class="form-label">Proveedores</label>
-                   <select name="listaProveedores" id="listaProveedores" onchange="filtrarCompraEquipo()" class="form-select">
+                   <select name="listaProveedores" id="listaProveedores" onchange="filtrarCompraInsumo()" class="form-select">
                        <option value="0">Seleccione un proveedor</option>
                        {% for proveedor in listaProveedores %}
                        <option value="{{ proveedor.id }}">{{ proveedor.nombreProveedor }}</option>
@@ -53,13 +53,13 @@
                    </select>
             </div>
 
-                <!-- FECHA DE LA COMPRA DEL EQUIPO -->
+                <!-- FECHA DE LA COMPRA DEL INSUMO -->
             <div class="col-12">
                     <label for="fechaCompraInsumo" class="form-label">Fecha de la compra del insumo</label>
                     <input type="date" name="fechaCompraInsumo" id="fechaCompraInsumo" class="form-control">
             </div>
 
-                <!-- NUMERO DE LA FACTURA DE LA COMPRA DEL EQUIPO -->
+                <!-- NUMERO DE LA FACTURA DE LA COMPRA DEL INSUMO -->
             <div class="col-12">
                     <label for="numFactura" class="form-label">Numero de la factura</label>
                     <input type="text" name="numFactura" id="numFactura" class="form-control">

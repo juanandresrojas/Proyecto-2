@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+<!--BLOQUE PRINCIPAL-->
+{% block content %}
+<div class="py-5 text-center">
+    <h2>{{ nombreForm }}</h2>
+</div>
+<div class="col-12">
+    <form action="{% url ruta %}" method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+
+            <!-- INSUMO LABOR -->
+            <div class="col-12">
+                <label for="listaInsumoLabor" class="form-label">Insumo Labor</label>
+                <select name="listaInsumoLabor" id="listaInsumoLabor" onchange="filtrarDatosLaborInsumo()" class="form-select">
+                    <option value="0">Seleccione un Labor</option>
+                    {% for insumoLabor in listaInsumoLabor %}
+                    <option value="{{ insumoLabor.id }}" data-insumofinca ="{{ insumoLabor.insumoFinca__id }}" data-cultivo ="{{ insumoLabor.cultivo__id }}">{{ insumoLabor.cantidadUsadaInsumo }}</option>
+                    {% endfor %} 
+                </select>
+            </div>
+
+
+           <!-- CULTIVOS -->
+           <div class="col-12">
+                <label for="listaCultivos" class="form-label">Cultivos</label>
+                <select name="listaCultivos" id="listaCultivos" onchange="filtrarLaborInsumo()" class="form-select">
+                    <option value="0">Seleccione un Cultivo</option>
+                    {% for cultivo in listaCultivos %}
+                    <option value="{{ cultivo.id }}" >{{ cultivo.observacCultivo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- INSUMO FINCA -->
+            <div class="col-12">
+                    <label for="listaInsumosFinca" class="form-label">Insumos de Finca</label>
+                    <select name="listaInsumosFinca" id="listaInsumosFinca" onchange="filtrarLaborInsumo()" class="form-select">
+                        <option value="0">Seleccione un Equipo de Finca</option>
+                        {% for insumoFinca in listaInsumosFinca %}
+                        <option value="{{ insumoFinca.id }}">{{ insumoFinca.descripInsumoFinca }}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+                
+
+            <!-- CANTIDAD USADA DEL INSUMO -->            
+            <div class="col-12">
+                    <label for="cantidadUsadaInsumo" class="form-label">Cantidad Usada</label>
+                    <input type="number" name="cantidadUsadaInsumo" id="cantidadUsadaInsumo" class="form-control">
+            </div>
+
+
+             <!-- COSTO DEL INSUMO -->            
+             <div class="col-12">
+                <label for="costo" class="form-label">Costo</label>
+                <input type="number" name="costo" id="costo" class="form-control">
+            </div>
+        
+
+            
+            {% comment %} <!-- OBSERVACIÓN DE LA COMPRA -->
+            <div class="col-12">
+                    <label for="observacCompraEquipo" class="form-label">Observación de la compra</label>
+                    <input type="text" name="observacCompraEquipo" id="observacCompraEquipo" class="form-control">
+            </div> {% endcomment %}
+
+            <hr class="my-4">
+            <button class="w-100 btn boton1 btn-lg" type="submit">Guardar datos</button>
+            
+        </div>
+    </form>
+</div>
+{% endblock %}
+<!--FIN BLOQUE PRINCIPAL-->

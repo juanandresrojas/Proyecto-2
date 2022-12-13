@@ -35,7 +35,7 @@
             <div class="col-12">
                     <label for="listaEquipoFinca" class="form-label">Equipo Finca </label>
                     <select name="listaEquipoFinca" id="listaEquipoFinca" onchange="filtrarCompraEquipo()" class="form-select">
-                        <option value="0">Seleccione un Producto</option>
+                        <option value="0">Seleccione un Equipo</option>
                         {% for equipoFinca in listaEquipoFinca %}
                         <option value="{{ equipoFinca.id }}">{{ equipoFinca.descripEquipoFinca }}</option>
                         {% endfor %}

@@ -599,7 +599,7 @@ def editarCompraEquipo(request):
         if listaCompraEquipo == 0:
             regCompraEquipo = CompraEquipo(equipo=regEquipo, equipoFinca=regEquipoFinca, proveedor=regProveedores, fechaCompraEquipo=fechaCompraEquipo, numFactura=numFactura,
                                  cantidadCompraEquipo=cantidadCompraEquipo, valorCompraEquipo=valorCompraEquipo)
-            context['mensaje'] = 'Compra de quipo registrada'
+            context['mensaje'] = 'Compra de Equipo registrada'
             regCompraEquipo.save()
         else:
             # sino, modifica 
@@ -611,7 +611,7 @@ def editarCompraEquipo(request):
             regCompraEquipo.numFactura = numFactura
             regCompraEquipo.cantidadCompraEquipo = cantidadCompraEquipo
             regCompraEquipo.valorCompraEquipo = valorCompraEquipo
-            context['mensaje'] = 'Compra de equipo modificada'
+            context['mensaje'] = 'Compra de Equipo modificada'
             regCompraEquipo.save()
     return render(request, 'asistenteForm/compraEquipoForm.html', context)
 
@@ -691,19 +691,19 @@ def editarCompraInsumo(request):
 
     # CONSULTAR DE QUE FINCA PERTENECE EL USUARIO
     regFinca = request.user.Finca
-    listaCompraInsumo = CompraInsumo.objects. prefetch_related('equipoFinca').filter(equipoFinca__finca=regFinca).values('id', 'numFactura', 'equipo__id', 'equipoFinca__id', 'proveedor__id')
-    listaInsumo = Insumo.objects.all().values('id', 'descripEquipo')
-    listaEquipoFinca = EquipoFinca.objects.filter(finca=regFinca).values('id', 'descripEquipoFinca')
+    listaCompraInsumo = CompraInsumo.objects. prefetch_related('insumoFinca').filter(insumoFinca__finca=regFinca).values('id', 'numFactura', 'insumo__id', 'insumoFinca__id', 'proveedor__id')
+    listaInsumo = Insumo.objects.all().values('id', 'descripInsumo')
+    listaInsumoFinca = InsumoFinca.objects.filter(finca=regFinca).values('id', 'descripInsumoFinca')
     listaProveedores = Proveedor.objects.all().values('id', 'nombreProveedor')
 
     # ARMAR CONTEXTO
     context = {
-        'titulo': 'Compra de Equipos',
-        'ruta': 'compraEquipo',
-        'nombreForm': 'Ingresar compra de Equipo',
-        'listaCompraEquipo': listaCompraEquipo,
-        'listaEquipo': listaEquipo,
-        'listaEquipoFinca': listaEquipoFinca,
+        'titulo': 'Compra de Insumos',
+        'ruta': 'CompraInsumo',
+        'nombreForm': 'Ingresar compra de Insumos',
+        'listaCompraInsumo': listaCompraInsumo,
+        'listaInsumo': listaInsumo,
+        'listaInsumoFinca': listaInsumoFinca,
         'listaProveedores': listaProveedores,
 
     }
@@ -716,49 +716,330 @@ def editarCompraInsumo(request):
             data = json.load(request)
             id = data.get('id')
             # CONSULTAR REGITRO DE TRABAJADOR
-            regCompraEquipo = CompraEquipo.objects.get(id=id)
+            regCompraInsumo = CompraInsumo.objects.get(id=id)
             # Respuesta JSON
             data = {
-                'equipo': regCompraEquipo.equipo.id,
-                'equipoFinca': regCompraEquipo.equipoFinca.id,
-                'proveedor': regCompraEquipo.proveedor.id,
-                'fechaCompraEquipo': regCompraEquipo.fechaCompraEquipo,
-                'numFactura': regCompraEquipo.numFactura,
-                'cantidadCompraEquipo': regCompraEquipo.cantidadCompraEquipo,
-                'valorCompraEquipo': regCompraEquipo.valorCompraEquipo,
+                'insumo': regCompraInsumo.insumo.id,
+                'insumoFinca': regCompraInsumo.insumoFinca.id,
+                'proveedor': regCompraInsumo.proveedor.id,
+                'cantidadCompraInsumo': regCompraInsumo.cantidadCompraInsumo,
+                'fechaCompraInsumo': regCompraInsumo.fechaCompraInsumo,
+                'numFactura': regCompraInsumo.numFactura,
+                'valorCompraInsumo': regCompraInsumo.valorCompraInsumo,
             }
             return JsonResponse(data)
 
     if request.method == 'POST':
-        listaCompraEquipo = int(request.POST['listaCompraEquipo'])
-        listaEquipo = int(request.POST['listaEquipo'])
-        listaEquipoFinca = int(request.POST['listaEquipoFinca'])
+        listaCompraInsumo = int(request.POST['listaCompraInsumo'])
+        listaInsumo = int(request.POST['listaInsumo'])
+        listaInsumoFinca = int(request.POST['listaInsumoFinca'])
         listaProveedores = int(request.POST['listaProveedores'])
-        fechaCompraEquipo = request.POST['fechaCompraEquipo']
+        cantidadCompraInsumo = request.POST['cantidadCompraInsumo']
+        fechaCompraInsumo = request.POST['fechaCompraInsumo']
         numFactura = request.POST['numFactura']
-        cantidadCompraEquipo = request.POST['cantidadCompraEquipo']
-        valorCompraEquipo = request.POST['valorCompraEquipo']
+        valorCompraInsumo = request.POST['valorCompraInsumo']
 
-        regEquipo = Equipo.objects.get(id=listaEquipo)
-        regEquipoFinca = EquipoFinca.objects.get(id=listaEquipoFinca)
+        regInsumo = Insumo.objects.get(id=listaInsumo)
+        regInsumoFinca = InsumoFinca.objects.get(id=listaInsumoFinca)
         regProveedores = Proveedor.objects.get(id=listaProveedores)
 
         # SI compra de quipo == 0, entonces crear 
-        if listaCompraEquipo == 0:
-            regCompraEquipo = CompraEquipo(equipo=regEquipo, equipoFinca=regEquipoFinca, proveedor=regProveedores, fechaCompraEquipo=fechaCompraEquipo, numFactura=numFactura,
-                                 cantidadCompraEquipo=cantidadCompraEquipo, valorCompraEquipo=valorCompraEquipo)
-            context['mensaje'] = 'Compra de quipo registrada'
-            regCompraEquipo.save()
+        if listaCompraInsumo == 0:
+            regCompraInsumo = CompraInsumo(insumo=regInsumo, insumoFinca=regInsumoFinca, proveedor=regProveedores, cantidadCompraInsumo=cantidadCompraInsumo, fechaCompraInsumo=fechaCompraInsumo,
+                                 numFactura=numFactura, valorCompraInsumo=valorCompraInsumo)
+            context['mensaje'] = 'Compra de Insumo registrada'
+            regCompraInsumo.save()
         else:
             # sino, modifica 
-            regCompraEquipo = CompraEquipo.objects.get(id=listaCompraEquipo)
-            regCompraEquipo.equipo = regEquipo
-            regCompraEquipo.equipoFinca = regEquipoFinca
-            regCompraEquipo.proveedor = regProveedores
-            regCompraEquipo.fechaCompraEquipo = fechaCompraEquipo
-            regCompraEquipo.numFactura = numFactura
-            regCompraEquipo.cantidadCompraEquipo = cantidadCompraEquipo
-            regCompraEquipo.valorCompraEquipo = valorCompraEquipo
-            context['mensaje'] = 'Compra de equipo modificada'
-            regCompraEquipo.save()
-    return render(request, 'asistenteForm/compraEquipoForm.html', context)
+            regCompraInsumo = CompraInsumo.objects.get(id=listaCompraInsumo)
+            regCompraInsumo.insumo = regInsumo
+            regCompraInsumo.insumoFinca = regInsumoFinca
+            regCompraInsumo.proveedor = regProveedores
+            regCompraInsumo.cantidadCompraInsumo = cantidadCompraInsumo
+            regCompraInsumo.fechaCompraInsumo = fechaCompraInsumo
+            regCompraInsumo.numFactura = numFactura
+            regCompraInsumo.valorCompraInsumo = valorCompraInsumo
+            context['mensaje'] = 'Compra de Insumo modificada'
+            regCompraInsumo.save()
+    return render(request, 'asistenteForm/compraInsumoForm.html', context)
+
+#*****************************************************************************************************************
+
+def editarEquiposLabor(request):
+
+    # CONSULTAR DE QUE FINCA PERTENECE EL USUARIO
+    regFinca = request.user.Finca
+    listaEquipoLabor = EquiposLabor.objects.prefetch_related('equipoFinca').filter(equipoFinca__finca=regFinca).values('id', 'cantidadUsadaEquipo', 'equipoFinca__id', 'cultivo__id')
+    listaCultivos = Cultivo.objects.prefetch_related('lote').filter(lote__finca=regFinca).values('id', 'observacCultivo')
+    listaEquipoFinca = EquipoFinca.objects.filter(finca=regFinca).values('id', 'descripEquipoFinca')
+
+    # ARMAR CONTEXTO
+    context = {
+        'titulo': 'Labores de Equipos',
+        'ruta': 'equiposlabor',
+        'nombreForm': 'Ingresar el labor del Equipo',
+        'listaEquipoLabor': listaEquipoLabor,
+        'listaCultivos': listaCultivos,
+        'listaEquipoFinca': listaEquipoFinca,
+    }
+
+    # SI ES AJAX Y POST
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        if request.method == 'POST':
+            # Toma la data enviada por el cliente
+            data = json.load(request)
+            id = data.get('id')
+            # CONSULTAR REGITRO DE TRABAJADOR
+            regEquiposLabor = EquiposLabor.objects.get(id=id)
+            # Respuesta JSON
+            data = {
+                'equipoFinca': regEquiposLabor.equipoFinca.id,
+                'cultivo': regEquiposLabor.cultivo.id,
+                'cantidadUsadaEquipo': regEquiposLabor.cantidadUsadaEquipo,
+                'costo': regEquiposLabor.costo,
+            }
+            return JsonResponse(data)
+
+    if request.method == 'POST':
+        listaEquipoLabor = int(request.POST['listaEquipoLabor'])
+        listaCultivos = int(request.POST['listaCultivos'])
+        listaEquipoFinca = int(request.POST['listaEquipoFinca'])
+        cantidadUsadaEquipo = request.POST['cantidadUsadaEquipo']
+        costo = request.POST['costo']
+
+        regEquipoFinca = EquipoFinca.objects.get(id=listaEquipoFinca)
+        regCultivo = Cultivo.objects.get(id=listaCultivos)
+
+        # SI EQUIPO LABOR == 0 ENTONCES CREAR:
+        if listaEquipoLabor == 0:
+            regEquiposLabor = EquiposLabor(equipoFinca=regEquipoFinca, cultivo=regCultivo, cantidadUsadaEquipo=cantidadUsadaEquipo,costo=costo )
+            context['mensaje'] = 'Labor de Equipo registrada'
+            regEquiposLabor.save()
+        else:
+            # SI NO, MODIFICA
+            regEquiposLabor = EquiposLabor.objects.get(id=listaEquipoLabor)
+            regEquiposLabor.equipoFinca = regEquipoFinca
+            regEquiposLabor.cultivo = regCultivo
+            regEquiposLabor.cantidadUsadaEquipo = cantidadUsadaEquipo
+            regEquiposLabor.costo = costo
+            context['mensaje'] = 'Labor de Equipo modificada'
+            regEquiposLabor.save()
+    return render(request, 'asistenteForm/equiposLaborForm.html', context)
+
+#*****************************************************************************************************************
+
+def editarInsumoLabor(request):
+
+    # CONSULTAR DE QUE FINCA PERTENECE EL USUARIO
+    regFinca = request.user.Finca
+    listaHorasTrabajo = HoraTrabajo.objects.prefetch_related('trabajador').filter(trabajador__finca=regFinca).values('id', 'cantidadUsadaInsumo', 'categHora__id', 'cultivo__id', )
+    listaCultivos = Cultivo.objects.prefetch_related('lote').filter(lote__finca=regFinca).values('id', 'observacCultivo')
+    listaInsumosFinca = InsumoFinca.objects.filter(finca=regFinca).values('id', 'descripInsumoFinca')
+
+    # ARMAR CONTEXTO
+    context = {
+        'titulo': 'Labores de Insumos',
+        'ruta': 'insumoLabor',
+        'nombreForm': 'Ingresar el labor del Insumo',
+        'listaInsumoLabor': listaInsumoLabor,
+        'listaCultivos': listaCultivos,
+        'listaInsumosFinca': listaInsumosFinca,
+    }
+
+    # SI ES AJAX Y POST
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        if request.method == 'POST':
+            # Toma la data enviada por el cliente
+            data = json.load(request)
+            id = data.get('id')
+            # CONSULTAR REGITRO DE TRABAJADOR
+            regInsumoLabor = InsumosLabor.objects.get(id=id)
+            # Respuesta JSON
+            data = {
+                'insumoFinca': regInsumoLabor.insumoFinca.id,
+                'cultivo': regInsumoLabor.cultivo.id,
+                'cantidadUsadaInsumo': regInsumoLabor.cantidadUsadaInsumo,
+                'costo': regInsumoLabor.costo,
+            }
+            return JsonResponse(data)
+
+    if request.method == 'POST':
+        listaInsumoLabor = int(request.POST['listaInsumoLabor'])
+        listaCultivos = int(request.POST['listaCultivos'])
+        listaInsumosFinca = int(request.POST['listaInsumosFinca'])
+        cantidadUsadaInsumo = request.POST['cantidadUsadaInsumo']
+        costo = request.POST['costo']
+
+        regInsumoFinca = InsumoFinca.objects.get(id=listaInsumosFinca)
+        regCultivo = Cultivo.objects.get(id=listaCultivos)
+
+        # SI INSUMO LABOR == 0 ENTONCES CREAR:
+        if listaInsumoLabor == 0:
+            regInsumoLabor = InsumosLabor(insumoFinca=regInsumoFinca, cultivo=regCultivo, cantidadUsadaInsumo=cantidadUsadaInsumo,costo=costo )
+            context['mensaje'] = 'Labor de Insumo registrada'
+            regInsumoLabor.save()
+        else:
+            # SI NO, MODIFICA
+            regInsumoLabor = InsumosLabor.objects.get(id=listaInsumoLabor)
+            regInsumoLabor.insumoFinca = regInsumoFinca
+            regInsumoLabor.cultivo = regCultivo
+            regInsumoLabor.cantidadUsadaInsumo = cantidadUsadaInsumo
+            regInsumoLabor.costo = costo
+            context['mensaje'] = 'Labor de Insumo modificada'
+            regInsumoLabor.save()
+    return render(request, 'asistenteForm/insumosLaborForm.html', context)
+
+#*****************************************************************************************************************
+
+def editarHorasTrabajo(request):
+
+    # CONSULTAR DE QUE FINCA PERTENECE EL USUARIO
+    regFinca = request.user.Finca
+    listaHorasTrabajo = HoraTrabajo.objects.prefetch_related('trabajador').filter(trabajador__finca=regFinca).values('id', 'observacLabor', 'trabajador__id', 'cultivo__id', 'categHora__id')
+    listaCultivos = Cultivo.objects.prefetch_related('lote').filter(lote__finca=regFinca).values('id', 'observacCultivo')
+    listaCategHora = CategHora.objects.all().values('id', 'descripCategHora')
+    listaTrabajador = Trabajador.objects.filter(finca=regFinca).values('id', 'nombreTrabajador')
+
+    # ARMAR CONTEXTO
+    context = {
+        'titulo': 'Horas De Trabajos',
+        'ruta': 'horaTrabajo',
+        'nombreForm': 'Ingresar El Registro De Hora',
+        'listaHorasTrabajo': listaHorasTrabajo,
+        'listaCultivos': listaCultivos,
+        'listaCategHora': listaCategHora,
+        'listaTrabajador': listaTrabajador,
+    }
+
+    # SI ES AJAX Y POST
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        if request.method == 'POST':
+            # Toma la data enviada por el cliente
+            data = json.load(request)
+            id = data.get('id')
+            # CONSULTAR REGITRO DE TRABAJADOR
+            regHorasTrabajos = HoraTrabajo.objects.get(id=id)
+            # Respuesta JSON
+            data = {
+                'categHora': regHorasTrabajos.categHora.id,
+                'cultivo': regHorasTrabajos.cultivo.id,
+                'trabajador': regHorasTrabajos.trabajador.id,
+                'duracionLabor': regHorasTrabajos.duracionLabor,
+                'costo': regHorasTrabajos.costo,
+                'fechaLabor': regHorasTrabajos.fechaLabor,
+                'tipoTrabajo': regHorasTrabajos.tipoTrabajo,
+                'observacLabor': regHorasTrabajos.observacLabor,
+            }
+            return JsonResponse(data)
+
+    if request.method == 'POST':
+        listaHorasTrabajo = int(request.POST['listaHorasTrabajo'])
+        listaCultivos = int(request.POST['listaCultivos'])
+        listaCategHora = int(request.POST['listaCategHora'])
+        listaTrabajador = int(request.POST['listaTrabajador'])
+        duracionLabor = request.POST['duracionLabor']
+        costo = request.POST['costo']
+        fechaLabor = request.POST['fechaLabor']
+        tipoTrabajo = request.POST['tipoTrabajo']
+        observacLabor = request.POST['observacLabor']
+
+        regCategHora = CategHora.objects.get(id=listaCategHora)
+        regCultivo = Cultivo.objects.get(id=listaCultivos)
+        regTrabajador = Trabajador.objects.get(id=listaTrabajador)
+
+        # SI INSUMO LABOR == 0 ENTONCES CREAR:
+        if listaHorasTrabajo == 0:
+            regHorasTrabajos = HoraTrabajo(categHora=regCategHora, trabajador=regTrabajador, cultivo=regCultivo, duracionLabor=duracionLabor,costo=costo, fechaLabor=fechaLabor, tipoTrabajo=tipoTrabajo, observacLabor=observacLabor)
+            context['mensaje'] = 'Hora De Trabajo registrada'
+            regHorasTrabajos.save()
+        else:
+            # SI NO, MODIFICA
+            regHorasTrabajos = HoraTrabajo.objects.get(id=listaHorasTrabajo)
+            regHorasTrabajos.categHora = regCategHora
+            regHorasTrabajos.trabajador = regTrabajador
+            regHorasTrabajos.cultivo = regCultivo
+            regHorasTrabajos.duracionLabor = duracionLabor
+            regHorasTrabajos.costo = costo
+            regHorasTrabajos.fechaLabor = fechaLabor
+            regHorasTrabajos.tipoTrabajo = tipoTrabajo
+            regHorasTrabajos.observacLabor = observacLabor
+            context['mensaje'] = 'Hora De Trabajo modificada'
+            regHorasTrabajos.save()
+    return render(request, 'asistenteForm/horasTrabajoForm.html', context)
+
+
+#*****************************************************************************************************************
+
+def editarVentas(request):
+
+    # CONSULTAR DE QUE FINCA PERTENECE EL USUARIO
+    regFinca = request.user.Finca
+    listaVentas = Venta.objects.prefetch_related('cliente').filter(cliente__finca=regFinca).values('id', 'observacVenta', 'producto__id', 'cliente__id')
+    listaProducto = Producto.objects.filter(finca=regFinca).values('id', 'descripProducto')
+    listaCliente = Cliente.objects.filter(finca=regFinca).values('id', 'nombreCliente')
+
+    # ARMAR CONTEXTO
+    context = {
+        'titulo': 'Ventas',
+        'ruta': 'ventas',
+        'nombreForm': 'Ingresar La Venta',
+        'listaVentas': listaVentas,
+        'listaProducto': listaProducto,
+        'listaCliente': listaCliente,
+    }
+
+    # SI ES AJAX Y POST
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        if request.method == 'POST':
+            # Toma la data enviada por el cliente
+            data = json.load(request)
+            id = data.get('id')
+            # CONSULTAR REGITRO DE TRABAJADOR
+            regVentas = Venta.objects.get(id=id)
+            # Respuesta JSON
+            data = {
+                'producto': regVentas.producto.id,
+                'cliente': regVentas.cliente.id,
+                'numFactura': regVentas.numFactura,
+                'fechaventa': regVentas.fechaventa,
+                'cantidadVenta': regVentas.cantidadVenta,
+                'observacVenta': regVentas.observacVenta,
+                'valorTotalVentas': regVentas.valorTotalVentas,
+            }
+            return JsonResponse(data)
+
+    if request.method == 'POST':
+        listaVentas = int(request.POST['listaVentas'])
+        listaProducto = int(request.POST['listaProducto'])
+        listaCliente = int(request.POST['listaCliente'])
+        numFactura = request.POST['numFactura']
+        fechaventa = request.POST['fechaventa']
+        cantidadVenta = request.POST['cantidadVenta']
+        observacVenta = request.POST['observacVenta']
+        valorTotalVentas = request.POST['valorTotalVentas']
+
+        regProducto = Producto.objects.get(id=listaProducto)
+        regCliente = Cliente.objects.get(id=listaCliente)
+
+        # SI VENTA == 0 ENTONCES CREAR:
+        if listaVentas == 0:
+            regVentas = Venta(cliente=regCliente, producto=regProducto, fechaventa=fechaventa,numFactura=numFactura, cantidadVenta=cantidadVenta, observacVenta=observacVenta, valorTotalVentas=valorTotalVentas)
+            context['mensaje'] = 'Venta Registrada'
+            regVentas.save()
+        else:
+            # SI NO, MODIFICA
+            regVentas = Venta.objects.get(id=listaVentas)
+            regVentas.cliente = regCliente
+            regVentas.producto = regProducto
+            regVentas.fechaventa = fechaventa
+            regVentas.numFactura = numFactura
+            regVentas.cantidadVenta = cantidadVenta
+            regVentas.observacVenta = observacVenta
+            regVentas.valorTotalVentas = valorTotalVentas
+            context['mensaje'] = 'Venta Modificada'
+            regVentas.save()
+    return render(request, 'asistenteForm/ventasForm.html', context)

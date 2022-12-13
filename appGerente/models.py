@@ -210,9 +210,21 @@ class InsumosLabor (models.Model):
         return self.cantidadUsadaInsumo
 
     class Meta:
-        verbose_name_plural = "Insumos de labores"
+        verbose_name_plural = "Labores de Insumos"
 #***************************************************************************************
 
+class EquiposLabor (models.Model):
+    equipoFinca = models.ForeignKey(EquipoFinca, on_delete=models.CASCADE , null=False)
+    cultivo = models.ForeignKey(Cultivo, on_delete=models.CASCADE , null=False)
+    cantidadUsadaEquipo = models.IntegerField(null=False)
+    costo = models.DecimalField(max_digits=12, decimal_places=2, null=False)
+
+    def __str__(self):
+        return self.cantidadUsadaEquipo
+
+    class Meta:
+        verbose_name_plural = "Labores de Equipos"
+#***************************************************************************************
 
 
 
